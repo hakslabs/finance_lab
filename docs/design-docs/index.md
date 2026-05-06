@@ -15,6 +15,8 @@ philosophies, and explanatory notes.
   HTML extraction boundaries and banned uses.
 - [Scrapling Operating Mode Decision](./scrapling-operating-mode-decision.md) —
   GitHub Actions Python package as default; MCP deferred; graduation gates.
+- [Docling Audit Set](./docling-audit-set.md) — 20-document audit manifest,
+  metadata fields, acceptance rubric, and gate thresholds.
 
 ## Planned
 

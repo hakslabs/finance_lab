@@ -73,6 +73,11 @@ Scrapling as the controlled scraping layer for allowed external pages.
 - [ ] Add a 20-document Docling audit set before M4 begins, covering Korean
       reports, US research PDFs, tables, scanned pages, and multi-column
       layouts.
+      Manifest/spec is documented in
+      `docs/design-docs/docling-audit-set.md` with 20 placeholder slots,
+      required metadata fields, and acceptance rubric. Actual source
+      selection, owner approval, download, conversion, and review remain
+      pending.
 - [ ] Evaluate Scrapling on three allowed source types: official IR pages,
       public RSS / HTML indexes, and report landing pages that do not require
       login or anti-bot bypass.
@@ -157,3 +162,11 @@ Scrapling as the controlled scraping layer for allowed external pages.
   Python package in GitHub Actions; MCP is deferred as optional operator-assist.
   Source evaluation, proof of concept, and reliability measurements remain
   pending.
+- 2026-05-07 slice: Docling audit-set manifest/spec is documented in
+  `docs/design-docs/docling-audit-set.md`. Defines 20 placeholder audit slots
+  across five categories (Korean reports, US research PDFs, financial tables,
+  scanned/image-heavy, HTML/DOCX/XLSX), required metadata fields per record,
+  a six-dimension acceptance rubric, and gate thresholds aligned with the
+  reports pipeline spec (>= 80% table extraction accuracy, 20 documents before
+  M4). Actual source selection, owner approval, download, Docling conversion,
+  and human review are not started.
