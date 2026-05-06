@@ -41,6 +41,15 @@ async function main(): Promise<void> {
     detail: publicRead.error ? publicRead.error.message : "quotes select reachable"
   });
 
+  const securityMasterRead = await anon.from("securities_master").select("symbol,name").limit(1);
+  results.push({
+    name: "anonymous security master select",
+    ok: !securityMasterRead.error,
+    detail: securityMasterRead.error
+      ? securityMasterRead.error.message
+      : "securities_master select reachable"
+  });
+
   const testSymbol = `SMOKE_${Date.now()}`;
   const anonWrite = await anon.from("quotes").insert({ symbol: testSymbol, px: 1, pct: 0 });
   results.push({
@@ -51,6 +60,27 @@ async function main(): Promise<void> {
 
   if (!anonWrite.error) {
     await service.from("quotes").delete().eq("symbol", testSymbol);
+  }
+
+  const securityMasterTestSymbol = `SMOKE_SECURITY_${Date.now()}`;
+  const securityMasterAnonWrite = await anon.from("securities_master").insert({
+    symbol: securityMasterTestSymbol,
+    name: "Smoke Security",
+    asset_class: "equity",
+    country: "United States",
+    currency: "USD",
+    source: "smoke"
+  });
+  results.push({
+    name: "blocked anonymous security master write",
+    ok: Boolean(securityMasterAnonWrite.error),
+    detail: securityMasterAnonWrite.error
+      ? "anonymous securities_master insert rejected"
+      : "anonymous securities_master insert unexpectedly succeeded"
+  });
+
+  if (!securityMasterAnonWrite.error) {
+    await service.from("securities_master").delete().eq("symbol", securityMasterTestSymbol);
   }
 
   const serviceRead = await service.from("cron_logs").select("id,job,status").limit(1);

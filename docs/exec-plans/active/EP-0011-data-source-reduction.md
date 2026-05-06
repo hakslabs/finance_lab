@@ -112,3 +112,6 @@ Scrapling as the controlled scraping layer for allowed external pages.
   `1b81bacb9f8672491e8ef4bd4036c4e87204dbd9`; use
   `pnpm seed:financedatabase:dry-run`, `pnpm seed:financedatabase`, and
   `pnpm seed:financedatabase:verify`.
+- 2026-05-06 slice: stock search and default quote target selection now consume
+  `securities_master`. Screener options and admin symbol curation integration
+  remain deferred to their owning milestone plans.

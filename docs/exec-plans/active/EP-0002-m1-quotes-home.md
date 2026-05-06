@@ -20,9 +20,9 @@ sentiment data, satisfying the spec in
 
 ## Tasks
 
-- [ ] Seed `securities_master` from FinanceDatabase for US and South Korea
+- [x] Seed `securities_master` from FinanceDatabase for US and South Korea
       before quote cron targets are finalized.
-- [ ] Build the quote target list from `securities_master` plus curated
+- [x] Build the quote target list from `securities_master` plus curated
       defaults instead of hard-coded symbols. Curated defaults start with the
       top KOSPI and S&P 500 constituents by market cap / index weight.
 - [ ] Implement `app/api/cron/quotes-us/route.ts` — Finnhub fetch every 15
@@ -41,7 +41,7 @@ sentiment data, satisfying the spec in
 - [ ] Build the global header (logo + nav + theme toggle + alerts bell +
       `⌘K` palette stub).
 - [ ] Wire `★` watchlist add / remove on the quick-view widget.
-- [ ] Add `/api/search` endpoint (stocks first; masters / terms / reports
+- [x] Add `/api/search` endpoint (stocks first; masters / terms / reports
       land in later milestones).
 - [ ] Implement empty / error states from `STOCKLAB-Project-Plan.md`
       §States for every widget on the home page.
@@ -69,3 +69,6 @@ sentiment data, satisfying the spec in
 - Do not implement the full stock detail screen yet — M2 owns it.
 - The "내 수익률 vs 시장 평균" widget can show a placeholder for a user
   without `holdings`; full computation is scope-shared with M5.
+- 2026-05-06 slice: `securities_master`-backed stock search and default quote
+  target selection are complete. Cron handlers, home widgets, and UI search
+  surfaces remain pending M1 work.
