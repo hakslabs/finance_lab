@@ -164,6 +164,59 @@ export type Database = {
         };
         Relationships: [];
       };
+      reports: {
+        Row: {
+          id: string;
+          src: string;
+          category: string;
+          title: string;
+          pdf_url: string | null;
+          markdown: string | null;
+          summary: string | null;
+          tickers: string[];
+          tags: string[];
+          published_at: string;
+        };
+        Insert: {
+          id?: string;
+          src: string;
+          category: string;
+          title: string;
+          pdf_url?: string | null;
+          markdown?: string | null;
+          summary?: string | null;
+          tickers?: string[];
+          tags?: string[];
+          published_at: string;
+        };
+        Update: {
+          id?: string;
+          src?: string;
+          category?: string;
+          title?: string;
+          pdf_url?: string | null;
+          markdown?: string | null;
+          summary?: string | null;
+          tickers?: string[];
+          tags?: string[];
+          published_at?: string;
+        };
+        Relationships: [];
+      };
+      reports_tables: {
+        Row: { report_id: string; idx: number; table_json: Json };
+        Insert: { report_id: string; idx: number; table_json: Json };
+        Update: { report_id?: string; idx?: number; table_json?: Json };
+        Relationships: [
+          {
+            foreignKeyName: "reports_tables_report_id_fkey";
+            columns: ["report_id"];
+            isOneToOne: false;
+            referencedRelation: "reports";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
       user_preferences: {
         Row: {
           user_id: string;

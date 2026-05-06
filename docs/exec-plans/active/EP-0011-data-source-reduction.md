@@ -64,8 +64,12 @@ Scrapling as the controlled scraping layer for allowed external pages.
       output Markdown, output table JSON, source metadata, and parser
       warnings.
       Contract lives in `docs/design-docs/docling-worker-contract.md`.
-- [ ] Store Docling Markdown in `reports.markdown` and extracted tables in
-      `reports_tables`.
+- [x] Add the Docling persistence boundary that stores normalized worker
+      Markdown in `reports.markdown`, extracted table JSON in
+      `reports_tables`, and audit rows in `external_source_runs`.
+      Implemented as a server-side helper and unit tests only; runtime worker,
+      GitHub Actions invocation, audit set processing, and real persisted runs
+      remain pending.
 - [ ] Add a 20-document Docling audit set before M4 begins, covering Korean
       reports, US research PDFs, tables, scanned pages, and multi-column
       layouts.
@@ -136,8 +140,11 @@ Scrapling as the controlled scraping layer for allowed external pages.
   quota table update, screener/admin curation wiring, and the external
   Supabase URL registration in Vercel/GitHub dashboards.
 - 2026-05-07 slice: Docling worker contract is documented in
-  `docs/design-docs/docling-worker-contract.md`. Runtime worker implementation,
-  persisted report updates, and the 20-document audit set remain pending.
+  `docs/design-docs/docling-worker-contract.md`. A tested server-side
+  persistence boundary accepts normalized worker output and writes existing
+  `reports.markdown`, `reports_tables.table_json`, and `external_source_runs`
+  rows. Runtime worker implementation, GitHub Actions job, audit set processing,
+  and real persisted report runs remain pending.
 - 2026-05-07 slice: Scrapling allowlist and banned-use contract is documented in
   `docs/design-docs/scrapling-allowlist-contract.md`. Source evaluation,
   package-vs-MCP decision, proof of concept, and reliability measurements remain
