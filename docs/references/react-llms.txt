@@ -1,0 +1,32 @@
+React 18 quick reference for STOCKLAB agents.
+
+Commands
+- (React is consumed via Next.js; no standalone CLI commands.)
+
+Conventions
+- Functional components only. No class components.
+- Co-locate state with the component that owns it. Lift only when more
+  than one component needs the same value.
+- Server Components are the default; mark interactive leaves with
+  'use client'.
+- Use Suspense + Server Components for data dependence; avoid useEffect
+  for data fetching on initial render.
+- Custom hooks live in app/_lib/hooks/use<Thing>.ts and are client-only.
+
+Constraints
+- No internal state in modules (no module-level mutable globals).
+  Drawings, filters, and watchlists persist to the database or to
+  localStorage with a documented key.
+- Prefer URL params for shareable state (filters, tabs).
+- Do not use dangerouslySetInnerHTML for any user- or report-supplied
+  HTML. Markdown goes through DOMPurify before render.
+
+Pitfalls
+- "use client" boundary placed too high → ships unnecessary JS to the
+  browser; lower it to the leaf component.
+- Reading window or localStorage during render → server / client
+  mismatch warnings; gate behind useEffect or 'use client'.
+- Capturing stale state in async closures → use the functional setter
+  form (setX(prev => ...)) for updates that depend on prior state.
+- Premature memoization → adds complexity with no measurable win;
+  measure before reaching for useMemo / React.memo.

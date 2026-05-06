@@ -1,0 +1,14 @@
+.DS_Store
+Thumbs.db
+.env
+.env.*
+!.env.example
+node_modules/
+.next/
+out/
+dist/
+build/
+coverage/
+*.log
+.design-canvas.state.json
+*-standalone.html

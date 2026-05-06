@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>STOCKLAB · 디자인 v1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<style>
+  html, body { margin: 0; padding: 0; }
+  body { background: #f0eee9; font-family: 'Pretendard Variable', sans-serif; }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="design/tokens.jsx"></script>
+<script type="text/babel" src="design/components.jsx"></script>
+<script type="text/babel" src="design/showcase.jsx"></script>
+<script type="text/babel" src="design/home.jsx"></script>
+<script type="text/babel" src="design/analysis-masters-reports.jsx"></script>
+<script type="text/babel" src="design/stock-portfolio.jsx"></script>
+<script type="text/babel" src="design/learn-mypage-login.jsx"></script>
+<script type="text/babel" src="design/stock-tabs.jsx"></script>
+<script type="text/babel" src="design/stock-tabs-2.jsx"></script>
+<script type="text/babel" src="design/stock-tabs-3.jsx"></script>
+<script type="text/babel" src="design/analysis-tabs.jsx"></script>
+<script type="text/babel" src="design/secondary.jsx"></script>
+<script type="text/babel" src="design/personal-admin.jsx"></script>
+<script type="text/babel" src="design/mobile-states.jsx"></script>
+
+<script type="text/babel" data-presets="env,react">
+  const App = () => (
+    <DesignCanvas>
+      <DCSection id="system" title="디자인 시스템 · Design System"
+        subtitle="Robinhood + Toss 스타일 — 모던하고 깔끔한 핀테크 비주얼. CSS 변수로 라이트·다크 전환.">
+        <DCArtboard id="ds-light" label="시스템 · Light" width={1200} height={2200}>
+          <DesignSystemShowcase theme="light" />
+        </DCArtboard>
+        <DCArtboard id="ds-dark" label="시스템 · Dark" width={1200} height={2200}>
+          <DesignSystemShowcase theme="dark" />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="home" title="홈 · Dashboard"
+        subtitle="포트폴리오 요약 hero · 지수 스트립 · 관심종목 · 시장 심리 게이지 · 미국·한국 주요 종목 · 뉴스 + 시장 지도 · 내 수익률 vs 시장 평균 · 이번 주 일정.">
+        <DCArtboard id="home-light" label="홈 · Light" width={1280} height={1920}>
+          <HomeDesign theme="light" />
+        </DCArtboard>
+        <DCArtboard id="home-dark" label="홈 · Dark" width={1280} height={1920}>
+          <HomeDesign theme="dark" />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="analysis" title="분석 · Analysis"
+        subtitle="추천 도구 hero + 8개 도구 그리드 + 섹터 등락 + 기술적 신호. 각 도구 카드 클릭 시 풀 화면 전환.">
+        <DCArtboard id="analysis-light" label="분석 · Light" width={1280} height={1320}>
+          <AnalysisDesign theme="light" />
+        </DCArtboard>
+        <DCArtboard id="analysis-dark" label="분석 · Dark" width={1280} height={1320}>
+          <AnalysisDesign theme="dark" />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="masters" title="고수 따라잡기 · Masters"
+        subtitle="좌측 24명 리스트, 우측 상세 (프로필 hero + Top 10 보유 + 분기 변동 + 투자 철학). 마스터-디테일 레이아웃.">
+        <DCArtboard id="masters-light" label="고수 따라잡기 · Light" width={1280} height={1480}>
+          <MastersDesign theme="light" />
+        </DCArtboard>
+        <DCArtboard id="masters-dark" label="고수 따라잡기 · Dark" width={1280} height={1480}>
+          <MastersDesign theme="dark" />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="stock" title="종목 상세 · Stock Detail"
+        subtitle="헤더 + 8탭 + 차트·핵심지표·뉴스 본문 + 컨센서스·유사종목·고수보유 사이드. 종목상세 v3.">
+        <DCArtboard id="stock-light" label="종목 상세 · Light" width={1280} height={1700}>
+          <StockDetailDesign theme="light" />
+        </DCArtboard>
+        <DCArtboard id="stock-dark" label="종목 상세 · Dark" width={1280} height={1700}>
+          <StockDetailDesign theme="dark" />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="portfolio" title="포트폴리오 · Portfolio"
+        subtitle="총자산 hero + 4탭 (요약 / 보유 / 거래 / 성과) + 보유 테이블 + 자산배분 + 내 수익률 vs 시장 평균.">
+        <DCArtboard id="portfolio-light" label="포트폴리오 · Light" width={1280} height={1500}>
+          <PortfolioDesign theme="light" />
+        </DCArtboard>
+        <DCArtboard id="portfolio-dark" label="포트폴리오 · Dark" width={1280} height={1500}>
+          <PortfolioDesign theme="dark" />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="learn" title="학습 · Learn"
+        subtitle="입문자용 hero + 카테고리 칩 + 가이드 카드 그리드 + 자주 찾는 용어 미리보기.">
+        <DCArtboard id="learn-light" label="학습 · Light" width={1200} height={1320}>
+          <LearnDesign theme="light" />
+        </DCArtboard>
+        <DCArtboard id="learn-dark" label="학습 · Dark" width={1200} height={1320}>
+          <LearnDesign theme="dark" />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="mypage" title="마이페이지 · My Page"
+        subtitle="프로필 hero + 통계 카드 4개 + 관심종목·팔로우·복습용어·저장리포트 4개 패널.">
+        <DCArtboard id="mypage-light" label="마이페이지 · Light" width={1100} height={1100}>
+          <MyPageDesign theme="light" />
+        </DCArtboard>
+        <DCArtboard id="mypage-dark" label="마이페이지 · Dark" width={1100} height={1100}>
+          <MyPageDesign theme="dark" />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="login" title="로그인 · Login"
+        subtitle="좌측 브랜드 비주얼 + 우측 OAuth(Google·Kakao) + 이메일 로그인 폼.">
+        <DCArtboard id="login-light" label="로그인 · Light" width={1280} height={820}>
+          <LoginDesign theme="light" />
+        </DCArtboard>
+        <DCArtboard id="login-dark" label="로그인 · Dark" width={1280} height={820}>
+          <LoginDesign theme="dark" />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="reports" title="리포트 · Reports"
+        subtitle="검색 · 필터 + 추천 hero + 사이드 카드 2개 + 최신 리포트 리스트. 모든 카드에 Gemini AI 요약 + 관련 티커 태그.">
+        <DCArtboard id="reports-light" label="리포트 · Light" width={1280} height={1700}>
+          <ReportsDesign theme="light" />
+        </DCArtboard>
+        <DCArtboard id="reports-dark" label="리포트 · Dark" width={1280} height={1700}>
+          <ReportsDesign theme="dark" />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="stock-tabs" title="종목 상세 · Tabs"
+        subtitle="단일 종목 의사결정 화면 — 8개 탭 풀 디자인. 차트(트레이딩뷰 스타일) · 재무(IS/BS/CF) · 적정가치 · 공시·실적 · 뉴스(AI 요약) · 수급(외국인·13F) · 목표주가(컨센서스+고수 보유).">
+        <DCArtboard id="stk-chart-light" label="차트 · Light" width={1280} height={1500}>
+          <StockChartDesign theme="light" />
+        </DCArtboard>
+        <DCArtboard id="stk-chart-dark" label="차트 · Dark" width={1280} height={1500}>
+          <StockChartDesign theme="dark" />
+        </DCArtboard>
+        <DCArtboard id="stk-fin-light" label="재무 · Light" width={1280} height={1300}>
+          <StockFinancialsDesign theme="light" />
+        </DCArtboard>
+        <DCArtboard id="stk-fin-dark" label="재무 · Dark" width={1280} height={1300}>
+          <StockFinancialsDesign theme="dark" />
+        </DCArtboard>
+        <DCArtboard id="stk-value-light" label="적정가치 · Light" width={1280} height={1200}>
+          <StockValueDesign theme="light" />
+        </DCArtboard>
+        <DCArtboard id="stk-value-dark" label="적정가치 · Dark" width={1280} height={1200}>
+          <StockValueDesign theme="dark" />
+        </DCArtboard>
+        <DCArtboard id="stk-filings-light" label="공시·실적 · Light" width={1280} height={1300}>
+          <StockFilingsDesign theme="light" />
+        </DCArtboard>
+        <DCArtboard id="stk-filings-dark" label="공시·실적 · Dark" width={1280} height={1300}>
+          <StockFilingsDesign theme="dark" />
+        </DCArtboard>
+        <DCArtboard id="stk-news-light" label="뉴스 · Light" width={1280} height={1300}>
+          <StockNewsDesign theme="light" />
+        </DCArtboard>
+        <DCArtboard id="stk-news-dark" label="뉴스 · Dark" width={1280} height={1300}>
+          <StockNewsDesign theme="dark" />
+        </DCArtboard>
+        <DCArtboard id="stk-supply-light" label="수급 · Light" width={1280} height={1300}>
+          <StockSupplyDesign theme="light" />
+        </DCArtboard>
+        <DCArtboard id="stk-supply-dark" label="수급 · Dark" width={1280} height={1300}>
+          <StockSupplyDesign theme="dark" />
+        </DCArtboard>
+        <DCArtboard id="stk-targets-light" label="목표주가 · Light" width={1280} height={1500}>
+          <StockTargetsDesign theme="light" />
+        </DCArtboard>
+        <DCArtboard id="stk-targets-dark" label="목표주가 · Dark" width={1280} height={1500}>
+          <StockTargetsDesign theme="dark" />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="analysis-tabs" title="분석 · Sub-tabs"
+        subtitle="분석 메뉴 4개 풀화면 — 시장 개요(지수·섹터·국가·거래대금) · 시장 심리(9개 게이지) · 기술적(시그널·분포) · 재무(시장 전체 비교).">
+        <DCArtboard id="anl-overview-light" label="시장 개요 · Light" width={1280} height={1180}>
+          <AnalysisOverviewDesign theme="light" />
+        </DCArtboard>
+        <DCArtboard id="anl-overview-dark" label="시장 개요 · Dark" width={1280} height={1180}>
+          <AnalysisOverviewDesign theme="dark" />
+        </DCArtboard>
+        <DCArtboard id="anl-sentiment-light" label="시장 심리 · Light" width={1280} height={1500}>
+          <AnalysisSentimentDesign theme="light" />
+        </DCArtboard>
+        <DCArtboard id="anl-sentiment-dark" label="시장 심리 · Dark" width={1280} height={1500}>
+          <AnalysisSentimentDesign theme="dark" />
+        </DCArtboard>
+        <DCArtboard id="anl-technical-light" label="기술적 · Light" width={1280} height={1200}>
+          <AnalysisTechnicalDesign theme="light" />
+        </DCArtboard>
+        <DCArtboard id="anl-technical-dark" label="기술적 · Dark" width={1280} height={1200}>
+          <AnalysisTechnicalDesign theme="dark" />
+        </DCArtboard>
+        <DCArtboard id="anl-financial-light" label="재무 · Light" width={1280} height={1200}>
+          <AnalysisFinancialDesign theme="light" />
+        </DCArtboard>
+        <DCArtboard id="anl-financial-dark" label="재무 · Dark" width={1280} height={1200}>
+          <AnalysisFinancialDesign theme="dark" />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="secondary" title="보조 화면 · Secondary"
+        subtitle="종목 검색(팩터 스크리너 + 결과) · 시장 지도(Finviz 스타일 트리맵) · 리포트 상세(Docling + Gemini AI 요약 + 관련 종목·태그·메모).">
+        <DCArtboard id="screener-light" label="종목 검색 · Light" width={1280} height={1100}>
+          <ScreenerDesign theme="light" />
+        </DCArtboard>
+        <DCArtboard id="screener-dark" label="종목 검색 · Dark" width={1280} height={1100}>
+          <ScreenerDesign theme="dark" />
+        </DCArtboard>
+        <DCArtboard id="heatmap-light" label="시장 지도 · Light" width={1280} height={900}>
+          <HeatmapDesign theme="light" />
+        </DCArtboard>
+        <DCArtboard id="heatmap-dark" label="시장 지도 · Dark" width={1280} height={900}>
+          <HeatmapDesign theme="dark" />
+        </DCArtboard>
+        <DCArtboard id="report-detail-light" label="리포트 상세 · Light" width={1480} height={1700}>
+          <ReportDetailDesign theme="light" />
+        </DCArtboard>
+        <DCArtboard id="report-detail-dark" label="리포트 상세 · Dark" width={1480} height={1700}>
+          <ReportDetailDesign theme="dark" />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="personal" title="개인 영역 · Personal"
+        subtitle="거래 내역(매수·매도·배당 입력 → 포트폴리오 자동 반영) · 계정 설정(프로필·통화·언어·테마·알림).">
+        <DCArtboard id="tx-light" label="거래 내역 · Light" width={1280} height={900}>
+          <TransactionsDesign theme="light" />
+        </DCArtboard>
+        <DCArtboard id="tx-dark" label="거래 내역 · Dark" width={1280} height={900}>
+          <TransactionsDesign theme="dark" />
+        </DCArtboard>
+        <DCArtboard id="settings-light" label="계정 설정 · Light" width={1280} height={1100}>
+          <SettingsDesign theme="light" />
+        </DCArtboard>
+        <DCArtboard id="settings-dark" label="계정 설정 · Dark" width={1280} height={1100}>
+          <SettingsDesign theme="dark" />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="admin" title="관리자 · Admin"
+        subtitle="고수·학습 콘텐츠 CRUD · 13F 자동 파싱 모니터 · 외부 API 사용량 + Cron 상태. 별도 라우트 / 별도 색상 (다크 레드) 으로 구분.">
+        <DCArtboard id="admin-light" label="관리자 대시보드 · Light" width={1280} height={1100}>
+          <AdminDesign theme="light" />
+        </DCArtboard>
+        <DCArtboard id="admin-dark" label="관리자 대시보드 · Dark" width={1280} height={1100}>
+          <AdminDesign theme="dark" />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="mobile" title="모바일 · Mobile"
+        subtitle="홈과 종목상세 두 화면을 모바일 (380×800) 로 우선 검증. 가로 스크롤 지수 스트립 · 가로 스크롤 탭 · 하단 탭바.">
+        <DCArtboard id="m-home-light" label="모바일 홈 · Light" width={420} height={840}>
+          <MobileHomeDesign theme="light" />
+        </DCArtboard>
+        <DCArtboard id="m-home-dark" label="모바일 홈 · Dark" width={420} height={840}>
+          <MobileHomeDesign theme="dark" />
+        </DCArtboard>
+        <DCArtboard id="m-stock-light" label="모바일 종목 · Light" width={420} height={840}>
+          <MobileStockDesign theme="light" />
+        </DCArtboard>
+        <DCArtboard id="m-stock-dark" label="모바일 종목 · Dark" width={420} height={840}>
+          <MobileStockDesign theme="dark" />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="states" title="상태 · States"
+        subtitle="빈 상태 (관심종목 0개 · 포트폴리오 첫 진입) + 에러 상태 (이전 데이터 / API 한도 / 네트워크 / 종목 없음) + 갱신시각 표준 컴포넌트.">
+        <DCArtboard id="states-light" label="빈 / 에러 가이드 · Light" width={1280} height={1200}>
+          <EmptyErrorDesign theme="light" />
+        </DCArtboard>
+        <DCArtboard id="states-dark" label="빈 / 에러 가이드 · Dark" width={1280} height={1200}>
+          <EmptyErrorDesign theme="dark" />
+        </DCArtboard>
+      </DCSection>
+    </DesignCanvas>
+  );
+
+  ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

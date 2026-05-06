@@ -1,0 +1,41 @@
+Next.js 14 App Router quick reference for STOCKLAB agents.
+
+Commands
+- pnpm create next-app@latest --app --ts            scaffold (already done)
+- pnpm dev                                          local dev at :3000
+- pnpm build                                        production build
+- pnpm start                                        run the production build
+- pnpm lint                                         eslint
+- pnpm typecheck                                    tsc --noEmit
+
+Conventions
+- App Router only. No Pages Router code under app/.
+- Default to React Server Components. Use 'use client' only at leaf
+  components that need interactivity, browser APIs, or chart canvas.
+- Co-locate route segments under app/<segment>/page.tsx with optional
+  layout.tsx, loading.tsx, error.tsx.
+- Server Actions for forms; app/api/*/route.ts for fetch-style endpoints.
+- Cron handlers live under app/api/cron/<job>/route.ts and check the
+  CRON_SECRET bearer header before doing anything.
+- Cache control: use `export const revalidate = N` aligned with the cron
+  cadence for the data the route returns.
+
+Constraints
+- Vercel Cron handlers run for at most 10 seconds. Heavy work moves to
+  GitHub Actions.
+- Edge runtime is acceptable for read-only routes. Cron handlers and
+  admin mutations stay on Node runtime to use the Supabase service key.
+- No client-side fetching of data already available on the server. Pass
+  data through props from the Server Component to the client island.
+- Markdown rendered to the DOM goes through DOMPurify, not raw HTML.
+
+Pitfalls
+- Forgetting 'use client' on components that use hooks → build error.
+- Importing server-only modules ('server-only') from a client component →
+  build error. Keep boundaries clean.
+- Using fetch() with default cache for fast-changing data → stale UI;
+  set `cache: 'no-store'` or `revalidate` explicitly.
+- Long-running cron handlers crossing the 10 s cap → silent timeouts;
+  move to GitHub Actions instead of bumping limits.
+- Reading env vars in client components → undefined unless prefixed with
+  NEXT_PUBLIC_.

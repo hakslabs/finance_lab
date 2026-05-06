@@ -1,0 +1,36 @@
+Vercel quick reference for STOCKLAB agents.
+
+Commands
+- pnpm dlx vercel link                      link the local repo to a project
+- pnpm dlx vercel env pull .env.local       pull project env vars locally
+- pnpm dlx vercel deploy                    one-off deploy
+- pnpm dlx vercel deploy --prod             promote to production
+- pnpm dlx vercel logs <deployment>         tail server logs
+
+Conventions
+- main branch → production deployment at app.stocklab.io.
+- Every PR → preview deployment with a per-PR Supabase preview project.
+- Cron schedules live in vercel.json under "crons". Each entry maps a
+  schedule (cron expr) to a path under /api/cron/*.
+- All cron handlers verify `Authorization: Bearer ${CRON_SECRET}`.
+- Secrets live in Vercel Project Settings; mirror them to GitHub Secrets
+  for the GitHub Actions workers.
+
+Constraints
+- Hobby plan: cron handlers must complete in 10 seconds.
+- Hobby plan has no built-in execution scaling beyond function defaults;
+  long-running work moves to GitHub Actions.
+- Build environment runs the same Node version as runtime; pin via
+  package.json `engines`.
+- Edge runtime is fine for stateless, RLS-protected reads; do not use
+  Edge for any handler that needs the Supabase service key.
+
+Pitfalls
+- Forgetting to mirror env vars between dev / preview / production →
+  preview deploy mysteriously fails. Use `vercel env pull` to verify.
+- Cron path mismatched in vercel.json → endpoint never fires; the cron
+  log on the dashboard is empty.
+- Bearer check missing on a new cron handler → publicly callable
+  endpoint with side effects. The check is mandatory, not optional.
+- Forgetting `runtime: 'nodejs'` on a privileged route → Vercel may run
+  it on Edge by default and break Supabase service-key calls.

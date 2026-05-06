@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>STOCKLAB · 와이어프레임 v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Pretendard&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<style>
+  html, body { margin: 0; padding: 0; }
+  body { background: #f0eee9; }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="wires-v2/wires-shared.jsx"></script>
+<script type="text/babel" src="wires-v2/wire-ia.jsx"></script>
+<script type="text/babel" src="wires-v2/wire-home.jsx"></script>
+<script type="text/babel" src="wires-v2/wire-stock.jsx"></script>
+<script type="text/babel" src="wires-v2/wire-portfolio.jsx"></script>
+<script type="text/babel" src="wires-v2/wire-analysis.jsx"></script>
+<script type="text/babel" src="wires-v2/wire-analysis-tabs.jsx"></script>
+<script type="text/babel" src="wires-v2/wire-stock-tabs-a.jsx"></script>
+<script type="text/babel" src="wires-v2/wire-stock-tabs-b.jsx"></script>
+<script type="text/babel" src="wires-v2/wire-remaining.jsx"></script>
+<script type="text/babel" src="wires-v2/wire-masters-learn.jsx"></script>
+<script type="text/babel" src="wires-v2/wire-screener-heatmap-login.jsx"></script>
+<script type="text/babel" src="wires-v2/wire-mypage-admin.jsx"></script>
+<script type="text/babel" src="wires-v2/wire-data-arch.jsx"></script>
+
+<script type="text/babel" data-presets="env,react">
+  // v2 wireframe canvas — IA, primary screens, secondary, personal area, admin, auth, data arch.
+
+  const App = () => (
+    <DesignCanvas>
+      <DCSection id="overview" title="개관 · Overview"
+        subtitle="v2 정보 구조 + 데이터 아키텍처. 메뉴 한국화(고수 따라잡기 / 종목 검색 등), 히트맵은 메뉴에서 빠지고 홈 위젯·분석 하위로, 마이페이지·관리자 영역 추가.">
+        <DCArtboard id="ia" label="IA · Site Map v2" width={1480} height={980}>
+          <WireIA />
+        </DCArtboard>
+        <DCArtboard id="data-arch" label="데이터 아키텍처" width={1480} height={1000}>
+          <WireDataArch />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="primary" title="주요 화면 · Primary"
+        subtitle="홈은 미국·한국 주요종목 스트립과 시장 심리 게이지가 추가되어 시장 분위기를 한눈에. 분석은 도구 진입점, 종목상세는 의사결정 화면, 포트폴리오는 자기 자산.">
+        <DCArtboard id="home" label="홈 · Dashboard v2" width={1280} height={1320}>
+          <WireHome />
+        </DCArtboard>
+        <DCArtboard id="analysis" label="분석 · Analysis Hub v2 (도구 그리드 + 미리보기)" width={1280} height={920}>
+          <WireAnalysisHubV2 />
+        </DCArtboard>
+        <DCArtboard id="stock" label="종목 상세 · Stock Detail (12 tabs · 구버전)" width={1280} height={1100}>
+          <WireStockDetail />
+        </DCArtboard>
+        <DCArtboard id="portfolio" label="포트폴리오 · Portfolio" width={1280} height={1280}>
+          <WirePortfolio />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="secondary" title="보조 화면 · Secondary"
+        subtitle="고수 따라잡기 · 리포트 · 학습 · 종목 검색. 리포트는 별도 메뉴(헤더), 학습은 입문서·용어사전. 히트맵은 메뉴에서 빠지고 분석 하위 풀화면 + 홈 미니 위젯으로 노출.">
+        <DCArtboard id="masters" label="고수 따라잡기 · Masters" width={1280} height={900}>
+          <WireMasters />
+        </DCArtboard>
+        <DCArtboard id="reports" label="리포트 · Reports (별도 메뉴, RSS 30+ + Gemini AI 요약)" width={1280} height={1100}>
+          <WireReports />
+        </DCArtboard>
+        <DCArtboard id="learn" label="학습 · Learn (입문서 · 용어사전)" width={1280} height={900}>
+          <WireLearn />
+        </DCArtboard>
+        <DCArtboard id="report-detail" label="리포트 상세 · Docling + Gemini AI 요약" width={1480} height={1500}>
+          <WireReportDetail />
+        </DCArtboard>
+        <DCArtboard id="screener" label="종목 검색 · Screener" width={1280} height={900}>
+          <WireScreener />
+        </DCArtboard>
+        <DCArtboard id="heatmap" label="시장 지도 (분석 하위) · Heatmap" width={1280} height={720}>
+          <WireHeatmap />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="personal" title="개인 영역 · Personal"
+        subtitle="헤더 ★ 드롭다운 / 프로필 메뉴에서 진입. 마이페이지는 통합 허브, 거래 내역은 포트폴리오의 원천 데이터, 계정 설정은 통화·언어·테마·알림.">
+        <DCArtboard id="mypage" label="마이페이지 · My Page Hub" width={1280} height={620}>
+          <WireMyPage />
+        </DCArtboard>
+        <DCArtboard id="transactions" label="거래 내역 · Transactions" width={1280} height={720}>
+          <WireTransactions />
+        </DCArtboard>
+        <DCArtboard id="settings" label="계정 설정 · Account Settings" width={1280} height={900}>
+          <WireAccountSettings />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="admin" title="관리자 · Admin"
+        subtitle="고수·학습 콘텐츠 CRUD, 13F 자동 파싱 보정, 뉴스 큐레이션, 사용자/권한, API 사용량·Cron 모니터. /admin 별도 라우트, 권한 있는 사용자만.">
+        <DCArtboard id="admin-dash" label="관리자 대시보드" width={1280} height={780}>
+          <WireAdmin />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="analysis-tabs" title="분석 탭별 풀화면 · Analysis Tabs"
+        subtitle="분석 메뉴의 4개 탭. 시장 개요 = 지수·섹터·거래대금 종합. 시장 심리 = 9개 게이지 풀화면. 기술적 = 신호·RSI 분포·골든크로스. 재무 = 시장 전체 PER/ROE 비교.">
+        <DCArtboard id="anl-overview" label="분석 · 시장 개요" width={1280} height={920}>
+          <WireAnalysisOverview />
+        </DCArtboard>
+        <DCArtboard id="anl-sentiment" label="분석 · 시장 심리 (9개 게이지)" width={1280} height={1140}>
+          <WireAnalysisSentiment />
+        </DCArtboard>
+        <DCArtboard id="anl-technical" label="분석 · 기술적" width={1280} height={1000}>
+          <WireAnalysisTechnical />
+        </DCArtboard>
+        <DCArtboard id="anl-financial" label="분석 · 재무 (시장 전체)" width={1280} height={1000}>
+          <WireAnalysisFinancial />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="stock-tabs" title="종목 상세 8탭 · Stock Detail Tabs"
+        subtitle="단일 종목의 의사결정 화면 8탭. 개요(요약 카드) / 차트(풀화면+그리기) / 재무(IS·BS·CF) / 밸류(PER·DCF·동종) / 공시·실적 / 뉴스(AI 요약) / 수급(외국인·13F) / 목표주가(컨센서스+고수 보유).">
+        <DCArtboard id="stk-overview" label="종목 · 개요" width={1280} height={920}>
+          <WireStockOverview />
+        </DCArtboard>
+        <DCArtboard id="stk-chart" label="종목 · 차트 (트레이딩뷰 스타일 · 자체 SVG 엔진)" width={1280} height={1180}>
+          <WireStockChart />
+        </DCArtboard>
+        <DCArtboard id="stk-financials" label="종목 · 재무" width={1280} height={1100}>
+          <WireStockFinancials />
+        </DCArtboard>
+        <DCArtboard id="stk-value" label="종목 · 밸류에이션" width={1280} height={920}>
+          <WireStockValue />
+        </DCArtboard>
+        <DCArtboard id="stk-filings" label="종목 · 공시·실적" width={1280} height={1000}>
+          <WireStockFilings />
+        </DCArtboard>
+        <DCArtboard id="stk-news" label="종목 · 뉴스 (AI 요약)" width={1280} height={920}>
+          <WireStockNews />
+        </DCArtboard>
+        <DCArtboard id="stk-supply" label="종목 · 수급" width={1280} height={1000}>
+          <WireStockSupplyDemand />
+        </DCArtboard>
+        <DCArtboard id="stk-targets" label="종목 · 목표주가 + 고수 보유" width={1280} height={1240}>
+          <WireStockTargets />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="mobile" title="모바일 · Mobile"
+        subtitle="홈과 종목 상세 두 화면을 우선 모바일로 검증. 데스크탑 정보 위계를 좁은 화면에 어떻게 압축할지 — 가로 스크롤 스트립, 하단 탭바, 가로 스크롤 탭바.">
+        <DCArtboard id="m-home" label="모바일 · 홈" width={420} height={840}>
+          <WireMobileHome />
+        </DCArtboard>
+        <DCArtboard id="m-stock" label="모바일 · 종목 상세" width={420} height={840}>
+          <WireMobileStock />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="states" title="상태 · States"
+        subtitle="빈 상태(추천 + CTA) · 에러 상태(이전 데이터 + 갱신시각 + 재시도). 모든 데이터 위젯에 일관 적용.">
+        <DCArtboard id="empty-error" label="빈 상태 · 에러 상태 가이드" width={1280} height={1100}>
+          <WireEmptyAndError />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="ops" title="운영 · Ops"
+        subtitle="API 한도 vs 예상 호출량 재검증. 무료 티어로 100% 커버 가능한지 확인.">
+        <DCArtboard id="api-budget" label="API 한도 · Cron 검증표" width={1280} height={780}>
+          <WireApiBudget />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="auth" title="인증 · Auth"
+        subtitle="포트폴리오 저장은 로그인 필요. 소셜 로그인(구글·애플·카카오) 우선, 이메일/비번은 보조.">
+        <DCArtboard id="login" label="로그인 · Login" width={720} height={760}>
+          <WireLogin />
+        </DCArtboard>
+        <DCPostIt top={120} left={780} rotate={2} width={240}>
+          ✅ v2 변경점:<br/>
+          · 메뉴 한국화 (고수 따라잡기 / 종목 검색)<br/>
+          · 미국·한국 주요종목 스트립 + 공포·탐욕 게이지<br/>
+          · 마이페이지 · 거래내역 · 계정설정 · 관리자<br/>
+          · 히트맵은 메뉴 제외 → 홈 위젯 + 분석 하위<br/>
+          · "내 수익률 vs 시장 평균" (이전 "포트폴리오 vs 벤치마크")<br/>
+          · 데이터 아키텍처 다이어그램 추가
+        </DCPostIt>
+      </DCSection>
+    </DesignCanvas>
+  );
+
+  ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

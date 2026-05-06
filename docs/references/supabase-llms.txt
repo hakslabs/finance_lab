@@ -1,0 +1,38 @@
+Supabase quick reference for STOCKLAB agents.
+
+Commands
+- pnpm supabase start                       local stack via Docker
+- pnpm supabase db push                     apply migrations to remote
+- pnpm supabase db diff -f <name>           generate a new migration
+- pnpm supabase gen types typescript        regenerate TS types
+- pnpm supabase functions deploy <fn>       deploy an Edge Function
+
+Conventions
+- Use the typed client wrapper in app/_lib/data/. Never import the raw
+  Supabase client from a route file.
+- Anon client is for client-side and Server Component reads (RLS
+  enforced). Service-key client is server-only.
+- Every user table has RLS with user_id = auth.uid() for SELECT /
+  INSERT / UPDATE / DELETE.
+- Admin tables and writes are gated by auth.jwt() ->> 'role' = 'admin'.
+- Migrations live in supabase/migrations/ and are the source of truth.
+  Hand-written schema changes via SQL editor are forbidden.
+
+Constraints
+- Free tier: 500 MB DB, 50K MAU, 7-day backup retention.
+- Service-key access lives in cron handlers, admin Server Actions, and
+  GitHub Actions only. It must not appear in client bundles.
+- transactions writes trigger a recompute of the matching holdings row;
+  the app must not write to holdings directly.
+- All schema changes ship as a migration plus a corresponding entry in
+  docs/generated/db-schema.md.
+
+Pitfalls
+- Calling the service-key client from a Server Component that may also
+  run on the Edge runtime → leaks privileges. Force Node runtime on
+  privileged routes.
+- Forgetting RLS on a new user table → silent data leakage. Add policies
+  in the same migration as the CREATE TABLE.
+- Cascading deletes on auth.users that drop user data unintentionally →
+  destructive. Prefer soft-delete or explicit referential rules.
+- Long Edge Function execution → use GitHub Actions instead.
