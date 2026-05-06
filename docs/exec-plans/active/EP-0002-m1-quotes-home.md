@@ -84,3 +84,9 @@ sentiment data, satisfying the spec in
 - 2026-05-06 slice: US quote ingestion now skips zero-request runs with a
   `no_requests` skip result before quota claim, and `incrementApiQuotaUsage` is
   fenced as non-atomic (live ingestion must continue using `claimApiQuotaUsage`).
+- 2026-05-07 reconciliation: checked items above are verified against committed
+  code. All four live cron handlers, vercel.json cron schedules, home page
+  widgets, global header, watchlist wiring, empty/error states, Vitest cron
+  tests, Playwright smoke, and Lighthouse CI for `/` remain pending. No
+  overclaiming: `quotes-us` route, provider client, and schedule are not yet
+  live.

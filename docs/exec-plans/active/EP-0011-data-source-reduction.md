@@ -32,10 +32,15 @@ Scrapling as the controlled scraping layer for allowed external pages.
 
 - [ ] Register `SUPABASE_URL=https://luiaofafdbikmqusurpi.supabase.co` in
       Vercel and GitHub Actions secrets / variables as appropriate.
+      Blocked: needs owner to set in Vercel dashboard and GitHub Actions.
+      Local `.env.example` is wired.
 - [ ] Verify `SUPABASE_PUBLISHABLE_KEY` and `SUPABASE_SECRET_KEY` are configured
       only in secret stores and never committed.
-- [ ] Add a Supabase connection smoke check to M0 that verifies Auth, RLS,
+      Note: repository scan/smoke work confirms keys are not committed; hosted
+      secret-store placement needs owner dashboard confirmation.
+- [x] Add a Supabase connection smoke check to M0 that verifies Auth, RLS,
       and service-role migration access against the target project.
+      Implemented in `scripts/smoke-supabase.ts`.
 - [x] Add `securities_master` and `security_aliases` migrations before M1
       quote work starts.
 - [x] Import only FinanceDatabase rows where `country` is `United States` or
@@ -45,8 +50,13 @@ Scrapling as the controlled scraping layer for allowed external pages.
       for search aliases.
 - [x] Preserve FinanceDatabase attribution and source revision metadata on
       every imported row.
-- [ ] Use the imported security master to drive stock search, screener
-      options, quote job target lists, and admin symbol curation.
+- [x] Use the imported security master to drive stock search and quote job
+      target lists.
+      Stock search (`/api/search`) and default quote target selection
+      (`app/_lib/cron/quote-targets.ts`) both read from `securities_master`.
+- [ ] Use the imported security master to drive screener options and admin
+      symbol curation.
+      Deferred to their owning milestone plans (M3 screener, admin routes).
 - [ ] Keep live prices, fundamentals, filings, and news on the existing
       allowed source plan; FinanceDatabase must not be treated as fresh market
       data.
@@ -115,3 +125,10 @@ Scrapling as the controlled scraping layer for allowed external pages.
 - 2026-05-06 slice: stock search and default quote target selection now consume
   `securities_master`. Screener options and admin symbol curation integration
   remain deferred to their owning milestone plans.
+- 2026-05-07 reconciliation: FinanceDatabase import, `securities_master`
+  migrations, stock search integration, quote target list integration, and
+  `external_source_runs` logging are all verified complete in committed code.
+  Remaining work is Docling (worker contract, storage, audit set), Scrapling
+  (evaluation, deployment decision, allowlists, paywall prohibition), Reliability
+  quota table update, screener/admin curation wiring, and the external
+  Supabase URL registration in Vercel/GitHub dashboards.
