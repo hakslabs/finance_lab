@@ -18,6 +18,9 @@ alternatives a future agent might reasonably propose.
 | 2026-05-06 | Theme is one `data-theme` attribute, all colors via CSS variables | Single switch surface, no per-component theme code | Tailwind dark: classes (more JSX noise), CSS-in-JS (extra bundle) |
 | 2026-05-06 | Stock detail is exactly 8 tabs | Each tab answers one question; more tabs erode focus | Single long page (poor performance), fewer tabs (loses depth) |
 | 2026-05-06 | Sole engineer treats every change as production | Friends are real users; prod-quality is not optional | Treating it as a hobby with rough edges (would erode trust quickly) |
+| 2026-05-06 | Start with one Supabase project for all environments | Owner chose speed and simplicity for the first implementation loop | Separate dev / preview / production Supabase projects at M0 |
+| 2026-05-06 | Defer real OAuth until the final auth pass | Owner will investigate provider setup separately; implementation should keep a temporary auth loop only | Blocking M0 scaffold on complete Google / Apple / Kakao OAuth setup |
+| 2026-05-06 | M1 default tickers come from top KOSPI and S&P 500 constituents by market cap / index weight | Gives sensible default coverage without hand-picked symbols | Arbitrary hard-coded symbols |
 
 ## Open Questions
 

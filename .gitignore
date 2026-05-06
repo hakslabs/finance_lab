@@ -9,6 +9,13 @@ out/
 dist/
 build/
 coverage/
+test-results/
+playwright-report/
+.lighthouseci/
+tsconfig.tsbuildinfo
+.vercel/
+supabase/.temp/
+.sentryclirc
 *.log
 .design-canvas.state.json
 *-standalone.html

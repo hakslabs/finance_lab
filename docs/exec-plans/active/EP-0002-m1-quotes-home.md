@@ -14,13 +14,17 @@ sentiment data, satisfying the spec in
 - UI spec: see `docs/product-specs/home-dashboard.md`.
 - Symbol universe and source-reduction plan: see
   [EP-0011](./EP-0011-data-source-reduction.md).
+- Owner decision on 2026-05-06: M1 default tickers should be selected from the
+  top KOSPI and S&P 500 constituents by market cap / index weight, not from an
+  arbitrary hand-picked list.
 
 ## Tasks
 
 - [ ] Seed `securities_master` from FinanceDatabase for US and South Korea
       before quote cron targets are finalized.
 - [ ] Build the quote target list from `securities_master` plus curated
-      defaults instead of hard-coded symbols.
+      defaults instead of hard-coded symbols. Curated defaults start with the
+      top KOSPI and S&P 500 constituents by market cap / index weight.
 - [ ] Implement `app/api/cron/quotes-us/route.ts` — Finnhub fetch every 15
       minutes during sessions. Bearer-protected. Updates `quotes` and
       `api_quota`.

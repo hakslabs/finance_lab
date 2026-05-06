@@ -254,7 +254,7 @@ function WireIA() {
         <div style={{ flex: 1 }}>
           <div className="w-h3" style={{ marginBottom: 6 }}>데이터 (요약 — 별도 다이어그램 참고)</div>
           <ul style={{ margin: 0, padding: '0 0 0 16px', fontSize: 11, color: W.muted, lineHeight: 1.7 }}>
-            <li>시세: Finnhub (US) · KIS (KR)</li>
+            <li>시세: Finnhub (US) · KRX (KR daily)</li>
             <li>재무: SEC EDGAR · DART</li>
             <li>13F: SEC 13F-HR 분기 파싱</li>
             <li>뉴스: Finnhub / NewsAPI · 매크로: FRED</li>

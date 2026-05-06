@@ -1,0 +1,48 @@
+name: Lighthouse
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "app/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "next.config.mjs"
+      - ".lighthouserc.cjs"
+      - ".github/workflows/lighthouse.yml"
+
+jobs:
+  login-lighthouse:
+    runs-on: ubuntu-latest
+    env:
+      NODE_ENV: production
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+      SUPABASE_URL: https://example.supabase.co
+      SUPABASE_PUBLISHABLE_KEY: ci-publishable-key-placeholder
+      SUPABASE_SECRET_KEY: ci-secret-key-placeholder
+      CRON_SECRET: ci-cron-secret-placeholder
+      SENTRY_DSN: ""
+      NEXT_PUBLIC_SENTRY_DSN: ""
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Run Lighthouse CI
+        run: pnpm dlx @lhci/cli autorun --config=.lighthouserc.cjs

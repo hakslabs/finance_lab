@@ -44,6 +44,9 @@
 
 ## Component Organization
 
+This is the target implementation structure. Empty directories under `app/`
+are placeholders until their owning execution plan adds runtime files.
+
 ```text
 app/
 ├── (public)/                  unauthenticated routes
@@ -58,7 +61,10 @@ app/
 │   ├── charts/                SVG chart engine
 │   ├── ai/                    Gemini wrappers
 │   ├── auth/                  role checks, server-only helpers
-│   └── ui/                    primitive components and tokens bridge
+│   ├── env/                   typed environment validation
+│   ├── hooks/                 client-only hooks
+│   ├── ui/                    primitive components and tokens bridge
+│   └── utils/                 small shared utilities
 └── api/                       Route Handlers (cron, search, mutations)
 ```
 
@@ -71,11 +77,20 @@ Naming:
 
 ## Styling Conventions
 
-- Color and spacing tokens live in `design/tokens.jsx` and are surfaced as
+- Color and spacing tokens live in `docs/design-exports/design/tokens.jsx` and are surfaced as
   CSS variables in `app/globals.css`.
 - Components must read from CSS variables, never literal hex colors.
 - Theme switching is a single `document.documentElement.dataset.theme = ...`
   call. No conditional JSX based on theme.
+
+## Mobile And PWA
+
+- Mobile support is responsive-first inside the same Next.js app.
+- Home and stock detail are the first mobile-critical surfaces.
+- PWA metadata, icons, install behavior, and offline posture are deferred to M8.
+- Responsive layout does not justify a Client Component by itself; client code
+  still needs interaction, browser-only APIs, or chart mounting.
+- Existing HTML / JSX design exports are references, not production components.
 
 ## Performance Budget
 

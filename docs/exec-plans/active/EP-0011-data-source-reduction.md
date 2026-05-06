@@ -23,7 +23,7 @@ Scrapling as the controlled scraping layer for allowed external pages.
 
 | Source | Role | Constraint |
 | --- | --- | --- |
-| Supabase | Primary DB and Auth backend | URL is public config; anon and service keys stay in secrets only |
+| Supabase | Primary DB and Auth backend | URL is public config; publishable and secret keys stay in secret stores only |
 | Docling | Convert PDFs and other documents to Markdown, tables, and optional JSON | MIT; use in GitHub Actions worker, not Vercel Cron |
 | FinanceDatabase | Seed `securities_master` for US and South Korea symbols | MIT; treat as product metadata, not live quote / fundamentals data |
 | Scrapling | Extract structured data from allowed HTML pages and optionally expose an MCP scraping workflow | BSD-3-Clause; respect robots.txt, terms, and domain allowlists |
@@ -32,18 +32,18 @@ Scrapling as the controlled scraping layer for allowed external pages.
 
 - [ ] Register `SUPABASE_URL=https://luiaofafdbikmqusurpi.supabase.co` in
       Vercel and GitHub Actions secrets / variables as appropriate.
-- [ ] Verify `SUPABASE_ANON_KEY` and `SUPABASE_SERVICE_KEY` are configured
+- [ ] Verify `SUPABASE_PUBLISHABLE_KEY` and `SUPABASE_SECRET_KEY` are configured
       only in secret stores and never committed.
 - [ ] Add a Supabase connection smoke check to M0 that verifies Auth, RLS,
       and service-role migration access against the target project.
-- [ ] Add `securities_master` and `security_aliases` migrations before M1
+- [x] Add `securities_master` and `security_aliases` migrations before M1
       quote work starts.
-- [ ] Import only FinanceDatabase rows where `country` is `United States` or
+- [x] Import only FinanceDatabase rows where `country` is `United States` or
       `South Korea`.
-- [ ] Prefer primary listings for US equities and KOSPI / KOSDAQ listings
+- [x] Prefer primary listings for US equities and KOSPI / KOSDAQ listings
       for South Korea; keep non-primary listings only when explicitly needed
       for search aliases.
-- [ ] Preserve FinanceDatabase attribution and source revision metadata on
+- [x] Preserve FinanceDatabase attribution and source revision metadata on
       every imported row.
 - [ ] Use the imported security master to drive stock search, screener
       options, quote job target lists, and admin symbol curation.
@@ -68,15 +68,16 @@ Scrapling as the controlled scraping layer for allowed external pages.
       schemas.
 - [ ] Forbid Scrapling use for bypassing paywalls, login walls, CAPTCHAs, or
       sites whose terms disallow collection.
-- [ ] Add `external_source_runs` logging so every import / scrape records
-      source, URL, revision, started / finished timestamps, status, and error.
+- [x] Add `external_source_runs` logging for the FinanceDatabase import so it
+      records source, URL, revision, started / finished timestamps, status, and
+      error. Docling and Scrapling runs will extend the same table later.
 - [ ] Update [Reliability](../../RELIABILITY.md) quota tables after the
       proof of concept measures actual GitHub Actions minutes and DB growth.
 
 ## Done When
 
 - The target Supabase project accepts migrations from CI and the app can read
-  public system tables with the anon key.
+  public system tables with the publishable key.
 - `securities_master` contains deduplicated US and South Korea symbols with
   source attribution and no disallowed data source references.
 - Home search and quote target selection read from `securities_master` rather
@@ -106,3 +107,8 @@ Scrapling as the controlled scraping layer for allowed external pages.
   license-cleared, and intentionally added as tests.
 - If a source cannot be clearly licensed for redistribution, keep only a link
   and derived non-copyrightable metadata, or do not ingest it.
+- FinanceDatabase seed import is implemented in
+  `scripts/import-financedatabase-seed.ts` against pinned revision
+  `1b81bacb9f8672491e8ef4bd4036c4e87204dbd9`; use
+  `pnpm seed:financedatabase:dry-run`, `pnpm seed:financedatabase`, and
+  `pnpm seed:financedatabase:verify`.

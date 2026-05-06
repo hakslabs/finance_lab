@@ -6,39 +6,31 @@ It is a navigation map, not a manual. Read the linked docs for substance.
 ## Read Order
 
 1. `ARCHITECTURE.md` — system map, module boundaries, invariants.
-2. `docs/product-specs/index.md` — feature scope and acceptance criteria.
-3. `docs/exec-plans/active/` — currently in-progress execution plans.
-4. `docs/design-docs/core-beliefs.md` — non-negotiable principles.
-5. `docs/FRONTEND.md`, `docs/SECURITY.md`, `docs/RELIABILITY.md` — pillar docs.
-6. `docs/references/*-llms.txt` — quick references for the stack.
-7. `STOCKLAB-Project-Plan.md` — original single-source-of-truth plan.
+2. `docs/CODE_STRUCTURE.md` — pre-implementation app folder contract.
+3. `docs/product-specs/index.md` — feature scope and acceptance criteria.
+4. `docs/exec-plans/active/` — currently in-progress execution plans.
+5. `docs/design-docs/core-beliefs.md` — non-negotiable principles.
+6. `docs/FRONTEND.md`, `docs/SECURITY.md`, `docs/RELIABILITY.md` — pillar docs.
+7. `docs/references/*-llms.txt` — quick references for the stack.
+8. `STOCKLAB-Project-Plan.md` — original single-source-of-truth plan.
 
 ## Repository Map
 
 ```text
 .
-├── app/                              Next.js 14 App Router (planned)
+├── app/                              Next.js 14 App Router scaffold
 │   ├── (public)/                     /login, marketing
 │   ├── (auth)/                       /, /analysis, /screener, /masters,
 │   │                                 /learn, /portfolio, /reports,
 │   │                                 /stock/[ticker], /me/*
 │   ├── admin/                        /admin (RLS + role gate)
-│   └── api/
-│       ├── search/                   unified search
-│       ├── stock/[ticker]/           stock detail bundle
-│       ├── transactions/             user trade entry
-│       ├── screener/save/            saved screens
-│       ├── alerts/                   alert rules
-│       ├── admin/master/[id]/        master CRUD
-│       ├── admin/article/            article CRUD
-│       └── cron/*                    Vercel Cron handlers (CRON_SECRET)
-├── design/                           design tokens (existing)
-├── wires-v2/                         wireframe v2 (existing)
+│   ├── api/                          Route Handlers, cron, mutations
+│   └── _lib/                         shared app modules
 ├── docs/                             this harness
+│   └── design-exports/               exported design / wireframe references
 ├── scripts/                          tooling and init
 ├── STOCKLAB-Project-Plan.md          canonical plan
-├── STOCKLAB Wireframes v2.html       wireframe export
-└── STOCKLAB Design.html              design export
+└── supabase/                         local Supabase config + migrations
 ```
 
 ## Mandatory Rules
@@ -56,6 +48,8 @@ It is a navigation map, not a manual. Read the linked docs for substance.
   (interactivity, browser-only APIs, charting). See `docs/FRONTEND.md`.
 - Markdown rendering must go through DOMPurify; never `dangerouslySetInnerHTML`
   on raw report content.
+- Mobile support is a responsive / PWA extension of the same Next.js app, not a
+  separate native app track. See `docs/CODE_STRUCTURE.md`.
 
 ## Done-When (Project-Level)
 
@@ -77,5 +71,6 @@ The project is considered shippable when:
 - Track unresolved tradeoffs in `docs/exec-plans/tech-debt-tracker.md`.
 - Capture significant design decisions in `docs/DESIGN.md` decision log.
 - Generated schema dumps belong in `docs/generated/`; do not hand-edit them.
+- Keep `app/` inert until the relevant execution plan adds runtime files.
 - Keep installation and run instructions in `README.md` only — do not duplicate
   here.

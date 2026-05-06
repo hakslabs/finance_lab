@@ -1,0 +1,379 @@
+/*
+ * STOCKLAB M0 Design System
+ * Tokens extracted from docs/design-exports/design/tokens.jsx.
+ * Theme: light (default) / dark via data-theme attribute
+ * Typography: local Pretendard / Korean UI fonts + JetBrains Mono fallback
+ */
+
+/* ── Light theme (default) ── */
+:root,
+[data-theme="light"] {
+  /* Surfaces */
+  --sl-bg: #fafafa;
+  --sl-surface: #ffffff;
+  --sl-surface-alt: #f4f5f7;
+  --sl-surface-hover: #f0f1f4;
+  --sl-overlay: rgba(15, 18, 26, 0.5);
+
+  /* Ink */
+  --sl-ink: #0f121a;
+  --sl-ink-sub: #454956;
+  --sl-muted: #7d818c;
+  --sl-faint: #b8bcc6;
+
+  /* Lines */
+  --sl-line: #e6e8ed;
+  --sl-line-strong: #d2d5dd;
+  --sl-hairline: #eef0f4;
+
+  /* Brand */
+  --sl-brand: #3461ff;
+  --sl-brand-hover: #2a52e0;
+  --sl-brand-soft: #eef2ff;
+  --sl-brand-ink: #1f3aa3;
+
+  /* Semantic */
+  --sl-up: #0fa67a;
+  --sl-up-soft: #e6f7f1;
+  --sl-down: #e8454a;
+  --sl-down-soft: #fde9ea;
+  --sl-warn: #f59e0b;
+  --sl-warn-soft: #fef3e2;
+  --sl-info: #3b82f6;
+  --sl-info-soft: #eaf2fe;
+
+  /* Chart palette */
+  --sl-cat1: #3461ff;
+  --sl-cat2: #0fa67a;
+  --sl-cat3: #f59e0b;
+  --sl-cat4: #a855f7;
+  --sl-cat5: #06b6d4;
+  --sl-cat6: #ef4444;
+
+  /* Typography */
+  --sl-font-sans: "Pretendard Variable", "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  --sl-font-mono: "JetBrains Mono", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+
+  /* Spacing scale (4px base) */
+  --sl-space-0: 0px;
+  --sl-space-1: 4px;
+  --sl-space-2: 8px;
+  --sl-space-3: 12px;
+  --sl-space-4: 16px;
+  --sl-space-5: 20px;
+  --sl-space-6: 24px;
+  --sl-space-7: 32px;
+  --sl-space-8: 40px;
+  --sl-space-9: 48px;
+  --sl-space-10: 64px;
+  --sl-space-11: 80px;
+
+  /* Radius */
+  --sl-radius-sm: 6px;
+  --sl-radius-md: 10px;
+  --sl-radius-lg: 14px;
+  --sl-radius-xl: 20px;
+  --sl-radius-pill: 999px;
+
+  /* Shadows */
+  --sl-shadow-sm: 0 1px 2px rgba(15, 18, 26, 0.04), 0 1px 1px rgba(15, 18, 26, 0.03);
+  --sl-shadow-md: 0 4px 12px rgba(15, 18, 26, 0.06), 0 2px 4px rgba(15, 18, 26, 0.04);
+  --sl-shadow-lg: 0 12px 32px rgba(15, 18, 26, 0.08), 0 4px 12px rgba(15, 18, 26, 0.04);
+  --sl-shadow-focus: 0 0 0 3px rgba(52, 97, 255, 0.18);
+
+  /* Motion */
+  --sl-motion-fast: 120ms cubic-bezier(0.4, 0, 0.2, 1);
+  --sl-motion-base: 180ms cubic-bezier(0.4, 0, 0.2, 1);
+  --sl-motion-slow: 320ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Dark theme ── */
+[data-theme="dark"] {
+  --sl-bg: #0b0d12;
+  --sl-surface: #13161d;
+  --sl-surface-alt: #1a1e27;
+  --sl-surface-hover: #222632;
+  --sl-overlay: rgba(0, 0, 0, 0.65);
+
+  --sl-ink: #f1f3f7;
+  --sl-ink-sub: #bdc1cb;
+  --sl-muted: #7d818c;
+  --sl-faint: #4a4e58;
+
+  --sl-line: #272b35;
+  --sl-line-strong: #363b46;
+  --sl-hairline: #1d2029;
+
+  --sl-brand: #5b7fff;
+  --sl-brand-hover: #7491ff;
+  --sl-brand-soft: #1a2042;
+  --sl-brand-ink: #a9bcff;
+
+  --sl-up: #1ec48f;
+  --sl-up-soft: #0f2a22;
+  --sl-down: #ff5d62;
+  --sl-down-soft: #2e1517;
+  --sl-warn: #fbbf24;
+  --sl-warn-soft: #2c2010;
+  --sl-info: #60a5fa;
+  --sl-info-soft: #0f1f33;
+
+  --sl-cat1: #5b7fff;
+  --sl-cat2: #1ec48f;
+  --sl-cat3: #fbbf24;
+  --sl-cat4: #c084fc;
+  --sl-cat5: #22d3ee;
+  --sl-cat6: #ff5d62;
+}
+
+/* ── Reset & base ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--sl-font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  letter-spacing: -0.005em;
+  color: var(--sl-ink);
+  background-color: var(--sl-bg);
+  min-height: 100vh;
+}
+
+/* ── Typography scale ── */
+.sl-h1 {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.sl-h2 {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+
+.sl-h3 {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+}
+
+.sl-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--sl-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.sl-caption {
+  font-size: 11px;
+  color: var(--sl-muted);
+}
+
+.sl-body-sm {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--sl-ink-sub);
+}
+
+/* Mono helpers */
+.sl-mono {
+  font-family: var(--sl-font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Semantic color helpers */
+.sl-text-sub {
+  color: var(--sl-ink-sub);
+}
+
+.sl-text-muted {
+  color: var(--sl-muted);
+}
+
+.sl-text-brand {
+  color: var(--sl-brand);
+}
+
+/* ── Buttons ── */
+.sl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 8px 14px;
+  border-radius: var(--sl-radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background var(--sl-motion-fast), border-color var(--sl-motion-fast),
+    color var(--sl-motion-fast), opacity var(--sl-motion-fast), box-shadow var(--sl-motion-fast);
+  white-space: nowrap;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.sl-btn:hover {
+  opacity: 0.92;
+}
+
+.sl-btn-primary {
+  background: var(--sl-brand);
+  color: #fff;
+  border-color: var(--sl-brand);
+}
+
+.sl-btn-primary:hover {
+  background: var(--sl-brand-hover);
+  border-color: var(--sl-brand-hover);
+  opacity: 1;
+}
+
+.sl-btn-secondary {
+  background: var(--sl-surface-alt);
+  color: var(--sl-ink);
+  border-color: var(--sl-line);
+}
+
+.sl-btn-secondary:hover {
+  background: var(--sl-surface-hover);
+  opacity: 1;
+}
+
+.sl-btn-ghost {
+  background: transparent;
+  color: var(--sl-ink-sub);
+  border-color: transparent;
+}
+
+.sl-btn-ghost:hover {
+  background: var(--sl-surface-alt);
+  color: var(--sl-ink);
+  opacity: 1;
+}
+
+.sl-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.sl-btn-lg {
+  padding: 12px 20px;
+  font-size: 14px;
+  border-radius: var(--sl-radius-md);
+}
+
+.sl-btn-block {
+  width: 100%;
+}
+
+/* ── Cards ── */
+.sl-card {
+  background: var(--sl-surface);
+  border: 1px solid var(--sl-line);
+  border-radius: var(--sl-radius-lg);
+}
+
+.sl-card-soft {
+  background: var(--sl-surface-alt);
+  border-radius: var(--sl-radius-md);
+}
+
+/* ── Tags / Pills ── */
+.sl-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: var(--sl-radius-sm);
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--sl-surface-alt);
+  color: var(--sl-ink-sub);
+}
+
+.sl-tag-warn {
+  background: var(--sl-warn-soft);
+  color: var(--sl-warn);
+}
+
+.sl-tag-brand {
+  background: var(--sl-brand-soft);
+  color: var(--sl-brand-ink);
+}
+
+.sl-tag-info {
+  background: var(--sl-info-soft);
+  color: var(--sl-info);
+}
+
+/* ── Layout primitives ── */
+.sl-stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.sl-row {
+  display: flex;
+  align-items: center;
+}
+
+.sl-grow {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.sl-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Divider ── */
+.sl-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--sl-space-3);
+  color: var(--sl-muted);
+  font-size: 11px;
+}
+
+.sl-divider::before,
+.sl-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--sl-line);
+}
+
+/* ── Focus ring (accessible) ── */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--sl-shadow-focus);
+}
+
+/* ── Selection ── */
+::selection {
+  background: var(--sl-brand-soft);
+  color: var(--sl-brand-ink);
+}

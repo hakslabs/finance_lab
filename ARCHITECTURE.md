@@ -45,7 +45,7 @@ The system has three execution domains:
 | Layer | Technology | Where it lives |
 | --- | --- | --- |
 | Routing & rendering | Next.js 14 App Router | `app/` |
-| Styling | CSS variables, Pretendard, JetBrains Mono | `app/globals.css`, `design/tokens.jsx` |
+| Styling | CSS variables, Pretendard, JetBrains Mono | `app/globals.css`, `docs/design-exports/design/tokens.jsx` |
 | Charting | Custom SVG engine | `app/_charts/` (planned) |
 | Database | Supabase Postgres | `supabase/migrations/` (planned) |
 | Auth | Supabase Auth (Email + Google + Apple + Kakao) | `app/(public)/login/` |
@@ -55,6 +55,14 @@ The system has three execution domains:
 | PDF extraction | Docling (Python) | invoked from GitHub Actions |
 | Error tracking | Sentry | server + client SDKs |
 | Analytics | Vercel Analytics | first-party |
+
+## Implementation Scaffold
+
+`app/` contains the M0 runtime scaffold: layout, global styles, temporary auth
+loop, and cron health route. Product route files are added only by the execution
+plan that owns that surface.
+
+The detailed folder contract lives in `docs/CODE_STRUCTURE.md`.
 
 ## Module Boundaries
 
@@ -71,11 +79,21 @@ features. Cross-cutting domain logic lives in `app/_lib/`.
 | `app/_lib/data/` | Server-side query helpers | Supabase clients |
 | `app/_lib/charts/` | SVG chart engine | No data deps; pure rendering |
 | `app/_lib/ai/` | Gemini and prompt helpers | Server-only env access |
-| `design/` | Design tokens (existing) | None — leaf module |
-| `wires-v2/` | Wireframe export (existing) | None — read-only reference |
+| `app/_lib/auth/` | Session and role helpers | Supabase auth clients |
+| `app/_lib/env/` | Typed environment validation | Server-only env access |
+| `app/_lib/hooks/` | Client-only React hooks | Browser APIs only when justified |
+| `app/_lib/ui/` | Primitive UI and token bridge | Design tokens, CSS variables |
+| `app/_lib/utils/` | Small shared utilities | No route-group dependencies |
+| `docs/design-exports/design/` | Design tokens and hi-fi export references | None — leaf module |
+| `docs/design-exports/wires-v2/` | Wireframe export references | None — read-only reference |
+| `docs/design-exports/*.html` | HTML / JSX design references | None — read-only reference |
 
 **Rule:** route groups must not import from each other. Shared logic must move
 to `app/_lib/` first.
+
+Mobile and PWA support extends the same Next.js application. It does not create
+a separate React Native, Expo, or native app module unless a future product
+decision explicitly changes that direction.
 
 ## Data Surface
 

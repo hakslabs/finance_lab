@@ -13,8 +13,9 @@ small audience, the security posture is non-negotiable.
 | Kakao OAuth | Korean users |
 
 The Supabase Auth flow is the single source of truth. All issued JWTs carry
-the user's `sub` (used as `auth.uid()` in RLS) and a custom `role` claim
-(`user` or `admin`).
+the user's `sub` (used as `auth.uid()` in RLS). Admin authorization uses the
+server-managed `app_metadata.app_role = admin` claim, never user-editable
+metadata.
 
 ## Authorization
 
@@ -22,7 +23,8 @@ the user's `sub` (used as `auth.uid()` in RLS) and a custom `role` claim
   SELECT, INSERT, UPDATE, DELETE.
 - **System tables** (`quotes`, `indices`, `sentiment`, …) allow anonymous
   SELECT only.
-- **Admin tables and writes** are gated by `auth.jwt() ->> 'role' = 'admin'`.
+- **Admin tables and writes** are gated by
+  `auth.jwt() -> 'app_metadata' ->> 'app_role' = 'admin'`.
 - **Service-key access** is server-only and exists for cron handlers and
   admin Server Actions. It never appears in client code.
 
@@ -39,8 +41,8 @@ the user's `sub` (used as `auth.uid()` in RLS) and a custom `role` claim
 | Variable | Purpose |
 | --- | --- |
 | `SUPABASE_URL` | Client and server access to the project |
-| `SUPABASE_ANON_KEY` | Client-side reads (RLS-protected) |
-| `SUPABASE_SERVICE_KEY` | Server-only privileged access (cron, admin) |
+| `SUPABASE_PUBLISHABLE_KEY` | Client-side reads (RLS-protected) |
+| `SUPABASE_SECRET_KEY` | Server-only privileged access (cron, admin) |
 | `CRON_SECRET` | Bearer token required by every cron handler |
 | `KRX_API_KEY` | KRX OpenAPI (KR daily quotes, indices) |
 | `DART_API_KEY` | DART (KR financials and filings) |
@@ -50,7 +52,8 @@ the user's `sub` (used as `auth.uid()` in RLS) and a custom `role` claim
 | `ALPHAVANTAGE_KEY` | Alpha Vantage (FX / CPI fallback) |
 | `GEMINI_API_KEY` | Gemini 1.5 Flash for summaries |
 | `OAUTH_GOOGLE_*` / `OAUTH_KAKAO_*` / `OAUTH_APPLE_*` | OAuth client IDs and secrets |
-| `SENTRY_DSN` | Error tracking |
+| `SENTRY_DSN` | Server and edge error tracking |
+| `NEXT_PUBLIC_SENTRY_DSN` | Client error tracking DSN; public by Sentry design |
 
 Secrets live in Vercel Project Settings and GitHub Secrets only. Local
 development uses `.env.local` which must remain gitignored.
@@ -63,9 +66,9 @@ environment examples and hosted configuration, but keys must not.
 
 Required controls:
 
-- `SUPABASE_ANON_KEY` is allowed in browser bundles only because RLS protects
+- `SUPABASE_PUBLISHABLE_KEY` is allowed in browser bundles only because RLS protects
   access.
-- `SUPABASE_SERVICE_KEY` is server-only and must be available only to cron,
+- `SUPABASE_SECRET_KEY` is server-only and must be available only to cron,
   admin, and migration contexts.
 - CI logs must not print Supabase keys, database URLs with embedded
   credentials, or migration connection strings.

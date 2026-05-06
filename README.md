@@ -22,7 +22,22 @@
 | AI | Gemini 1.5 Flash (1,500 req / 일 무료) |
 | 모니터링 | Vercel Analytics · Sentry (5K event 무료) |
 
+## Current State
+
+현재 레포는 M0 인프라 스캐폴드와 FinanceDatabase 종목 seed가 들어간 Next.js 14 App Router 앱이다. 인증, 홈, cron 헬스 체크는 최소 동작 검증용으로 구현되어 있고, 실제 제품 화면은 이후 실행 계획에서 확장한다.
+
+디자인 기준 자료는 이미 HTML / JSX export로 존재하며 `docs/design-exports/` 아래에 모아 둔다.
+
+- `docs/design-exports/STOCKLAB Design.html`
+- `docs/design-exports/STOCKLAB Wireframes v2.html`
+- `docs/design-exports/design-canvas.jsx`
+- `docs/design-exports/tweaks-panel.jsx`
+- `docs/design-exports/design/`
+- `docs/design-exports/wires-v2/`
+
 ## Installation
+
+아래 명령으로 로컬 개발과 검증을 실행한다.
 
 ```bash
 # 1. 의존성 설치
@@ -30,7 +45,7 @@ pnpm install
 
 # 2. 환경 변수 설정 (.env.local)
 cp .env.example .env.local
-# SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_KEY,
+# SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, SUPABASE_SECRET_KEY,
 # CRON_SECRET, KRX_API_KEY, DART_API_KEY, FINNHUB_API_KEY,
 # FRED_API_KEY, NEWSAPI_KEY, ALPHAVANTAGE_KEY, GEMINI_API_KEY,
 # OAUTH_GOOGLE_*, OAUTH_KAKAO_*, OAUTH_APPLE_*, SENTRY_DSN
@@ -52,6 +67,11 @@ pnpm lint
 # 테스트
 pnpm test              # 단위
 pnpm e2e               # Playwright
+
+# FinanceDatabase 종목 seed (US / South Korea equities + ETFs)
+pnpm seed:financedatabase:dry-run
+pnpm seed:financedatabase
+pnpm seed:financedatabase:verify
 
 # 프로덕션 빌드
 pnpm build
@@ -81,7 +101,15 @@ pnpm start
 ├── AGENTS.md                         에이전트 진입 문서 (영문)
 ├── ARCHITECTURE.md                   레포 최상위 구조 문서 (영문)
 ├── CLAUDE.md                         Claude Code 전용 운영 메모 (영문)
+├── app/                              Next.js 14 App Router 스캐폴드
+│   ├── README.md                     app 폴더 구조 계약
+│   ├── (public)/                     로그인 · 공개 페이지 예정
+│   ├── (auth)/                       인증 사용자 페이지 예정
+│   ├── admin/                        /admin 라우트 예정
+│   ├── api/                          Route Handlers 예정
+│   └── _lib/                         shared app modules 예정
 ├── docs/
+│   ├── CODE_STRUCTURE.md             구현 전 app 폴더 구조 계약
 │   ├── FRONTEND.md                   Next.js 14 RSC 전략 + 컴포넌트 구조
 │   ├── SECURITY.md                   Supabase Auth + RLS + 시크릿 관리
 │   ├── RELIABILITY.md                무료 티어 한도 + cron + 다운그레이드 정책
@@ -98,6 +126,7 @@ pnpm start
 │   │   └── completed/                완료된 EP 보관
 │   ├── generated/
 │   │   └── db-schema.md              Supabase 스키마 자동 생성 / 갱신
+│   ├── design-exports/               HTML / JSX 디자인 export 보관
 │   ├── product-specs/
 │   │   ├── index.md
 │   │   ├── home-dashboard.md
@@ -110,13 +139,14 @@ pnpm start
 │       ├── supabase-llms.txt
 │       ├── react-llms.txt
 │       └── vercel-llms.txt
-└── scripts/
-    └── init.sh                       하네스 디렉토리 초기화
+├── scripts/
+│   └── init.sh                       하네스 + app 스캐폴드 초기화
+└── supabase/                         Supabase config + migrations
 ```
 
 ## References
 
-- 와이어프레임: `STOCKLAB Wireframes v2.html`
-- 디자인: `STOCKLAB Design.html`
+- 와이어프레임: `docs/design-exports/STOCKLAB Wireframes v2.html`
+- 디자인: `docs/design-exports/STOCKLAB Design.html`
 - 단일 기획서: `STOCKLAB-Project-Plan.md`
-- 디자인 토큰: `design/tokens.jsx`, `design-canvas.jsx`, `tweaks-panel.jsx`
+- 디자인 토큰: `docs/design-exports/design/tokens.jsx`, `docs/design-exports/design-canvas.jsx`, `docs/design-exports/tweaks-panel.jsx`

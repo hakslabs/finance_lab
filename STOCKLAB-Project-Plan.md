@@ -432,7 +432,7 @@ Vercel Cron + GitHub Actions Worker 조합. 모든 작업의 호출량 합계가
 | --- | --- | --- |
 | 프론트 | Next.js 14 App Router · React 18 | Server Component 로 캐시 활용 + Vercel 친화 |
 | 스타일 | CSS 변수 + Pretendard + JetBrains Mono | 라이트/다크 토글 단일 속성 + 한국어 우선 + 숫자 mono |
-| UI 토큰 | 자체 토큰 (`design/tokens.jsx` 기반) | Robinhood + Toss 하이브리드 핀테크 룩 |
+| UI 토큰 | 자체 토큰 (`docs/design-exports/design/tokens.jsx` 기반) | Robinhood + Toss 하이브리드 핀테크 룩 |
 | 차트 | 자체 SVG 엔진 (그리기 도구 포함) | TradingView 라이트는 워터마크 · Chart.js 는 그리기 도구 부족 |
 | DB | Supabase Postgres | RLS + Auth + Edge Function 통합 + 무료 500MB |
 | Auth | Supabase Auth (Email + Google + Apple + Kakao) | OAuth 통합 |
@@ -480,8 +480,8 @@ Vercel Cron + GitHub Actions Worker 조합. 모든 작업의 호출량 합계가
 | 변수 | 용도 |
 | --- | --- |
 | `SUPABASE_URL` | 클라이언트 · 서버 공통 |
-| `SUPABASE_ANON_KEY` | 클라이언트 |
-| `SUPABASE_SERVICE_KEY` | 서버 (cron · admin) |
+| `SUPABASE_PUBLISHABLE_KEY` | 클라이언트 |
+| `SUPABASE_SECRET_KEY` | 서버 (cron · admin) |
 | `CRON_SECRET` | Vercel Cron 헤더 인증 |
 | `KRX_API_KEY` | 한국주 시세 |
 | `DART_API_KEY` | 한국 재무 / 공시 |
