@@ -36,6 +36,12 @@ export type Database = {
         };
         Relationships: [];
       };
+      api_quota: {
+        Row: { provider: string; day: string; used: number; limit: number };
+        Insert: { provider: string; day: string; used?: number; limit: number };
+        Update: { provider?: string; day?: string; used?: number; limit?: number };
+        Relationships: [];
+      };
       securities_master: {
         Row: {
           symbol: string;
@@ -187,7 +193,20 @@ export type Database = {
       };
     };
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Functions: {
+      claim_api_quota: {
+        Args: { p_provider: string; p_day: string; p_amount: number; p_limit: number };
+        Returns: {
+          provider: string;
+          day: string;
+          used: number;
+          limit: number;
+          remaining: number;
+          status: "ok" | "warning" | "exhausted";
+          claimed: boolean;
+        }[];
+      };
+    };
     Enums: { cron_status: "running" | "ok" | "failed" };
     CompositeTypes: Record<string, never>;
   };

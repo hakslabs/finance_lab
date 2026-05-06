@@ -25,6 +25,9 @@ sentiment data, satisfying the spec in
 - [x] Build the quote target list from `securities_master` plus curated
       defaults instead of hard-coded symbols. Curated defaults start with the
       top KOSPI and S&P 500 constituents by market cap / index weight.
+- [x] Add shared cron ingestion foundation helpers for `cron_logs`, `api_quota`,
+      and US/KR quote target preparation. Provider-backed cron handlers remain
+      pending.
 - [ ] Implement `app/api/cron/quotes-us/route.ts` — Finnhub fetch every 15
       minutes during sessions. Bearer-protected. Updates `quotes` and
       `api_quota`.
@@ -72,3 +75,12 @@ sentiment data, satisfying the spec in
 - 2026-05-06 slice: `securities_master`-backed stock search and default quote
   target selection are complete. Cron handlers, home widgets, and UI search
   surfaces remain pending M1 work.
+- 2026-05-06 slice: shared cron ingestion foundation is complete for run
+  logging, quota accounting, and quote target preparation. No provider adapters,
+  schedules, or live cron handlers were added.
+- 2026-05-06 slice: atomic `claim_api_quota` RPC prep and provider-neutral US
+  quote ingestion orchestration are complete. The live `quotes-us` route,
+  provider client, and schedule remain pending.
+- 2026-05-06 slice: US quote ingestion now skips zero-request runs with a
+  `no_requests` skip result before quota claim, and `incrementApiQuotaUsage` is
+  fenced as non-atomic (live ingestion must continue using `claimApiQuotaUsage`).
