@@ -21,6 +21,7 @@ alternatives a future agent might reasonably propose.
 | 2026-05-06 | Start with one Supabase project for all environments | Owner chose speed and simplicity for the first implementation loop | Separate dev / preview / production Supabase projects at M0 |
 | 2026-05-06 | Defer real OAuth until the final auth pass | Owner will investigate provider setup separately; implementation should keep a temporary auth loop only | Blocking M0 scaffold on complete Google / Apple / Kakao OAuth setup |
 | 2026-05-06 | M1 default tickers come from top KOSPI and S&P 500 constituents by market cap / index weight | Gives sensible default coverage without hand-picked symbols | Arbitrary hard-coded symbols |
+| 2026-05-07 | Scrapling runs as Python package in GitHub Actions; MCP deferred as optional operator-assist | Actions gives auditable logs, free-tier fit, and isolated secrets; MCP adds hosting and policy surface without a reviewed PoC to justify it | MCP as primary, both modes without partitioning, Vercel Cron for browser-dependent jobs |
 
 ## Open Questions
 

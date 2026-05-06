@@ -13,6 +13,8 @@ philosophies, and explanatory notes.
   input/output, persistence, and audit gates.
 - [Scrapling Allowlist Contract](./scrapling-allowlist-contract.md) — compliant
   HTML extraction boundaries and banned uses.
+- [Scrapling Operating Mode Decision](./scrapling-operating-mode-decision.md) —
+  GitHub Actions Python package as default; MCP deferred; graduation gates.
 
 ## Planned
 

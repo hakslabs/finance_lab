@@ -76,8 +76,11 @@ Scrapling as the controlled scraping layer for allowed external pages.
 - [ ] Evaluate Scrapling on three allowed source types: official IR pages,
       public RSS / HTML indexes, and report landing pages that do not require
       login or anti-bot bypass.
-- [ ] Decide whether Scrapling runs as a Python package in GitHub Actions,
+- [x] Decide whether Scrapling runs as a Python package in GitHub Actions,
       a dedicated MCP server for operator-assisted extraction, or both.
+      Decision: GitHub Actions Python package is the default mode. MCP is
+      deferred as optional operator-assist under guardrails. See
+      `docs/design-docs/scrapling-operating-mode-decision.md`.
 - [x] For Scrapling crawls, require domain allowlists, `robots_txt_obey`,
       crawl-delay handling, cached development mode, and per-source output
       schemas.
@@ -147,5 +150,10 @@ Scrapling as the controlled scraping layer for allowed external pages.
   and real persisted report runs remain pending.
 - 2026-05-07 slice: Scrapling allowlist and banned-use contract is documented in
   `docs/design-docs/scrapling-allowlist-contract.md`. Source evaluation,
-  package-vs-MCP decision, proof of concept, and reliability measurements remain
+  proof of concept, operating-mode implementation, and reliability measurements
+  remain pending.
+- 2026-05-07 slice: Scrapling operating mode decision is documented in
+  `docs/design-docs/scrapling-operating-mode-decision.md`. Default mode is
+  Python package in GitHub Actions; MCP is deferred as optional operator-assist.
+  Source evaluation, proof of concept, and reliability measurements remain
   pending.
