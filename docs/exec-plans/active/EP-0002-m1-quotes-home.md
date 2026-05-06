@@ -90,3 +90,6 @@ sentiment data, satisfying the spec in
   tests, Playwright smoke, and Lighthouse CI for `/` remain pending. No
   overclaiming: `quotes-us` route, provider client, and schedule are not yet
   live.
+- 2026-05-07 slice: provider-neutral `quotes-us` route harness and route-level
+  tests exist for auth ordering, logged ingestion success, and logged failure.
+  Live Finnhub provider wiring and cron schedule remain pending.
