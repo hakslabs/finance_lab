@@ -55,6 +55,39 @@ the user's `sub` (used as `auth.uid()` in RLS) and a custom `role` claim
 Secrets live in Vercel Project Settings and GitHub Secrets only. Local
 development uses `.env.local` which must remain gitignored.
 
+## Supabase Project Binding
+
+The owner-provided project URL is
+`https://luiaofafdbikmqusurpi.supabase.co`. This URL may appear in local
+environment examples and hosted configuration, but keys must not.
+
+Required controls:
+
+- `SUPABASE_ANON_KEY` is allowed in browser bundles only because RLS protects
+  access.
+- `SUPABASE_SERVICE_KEY` is server-only and must be available only to cron,
+  admin, and migration contexts.
+- CI logs must not print Supabase keys, database URLs with embedded
+  credentials, or migration connection strings.
+- Every migration smoke test must include a negative RLS check before it is
+  considered passing.
+
+## External Collection Controls
+
+FinanceDatabase, Docling, and Scrapling are allowed only through
+[EP-0011](./exec-plans/active/EP-0011-data-source-reduction.md).
+
+- FinanceDatabase imports must preserve attribution and source revision
+  metadata.
+- Docling outputs are treated as untrusted Markdown and must still go through
+  DOMPurify before rendering.
+- Scrapling runs must use explicit domain allowlists, respect robots.txt and
+  source terms, and avoid login walls, paywalls, CAPTCHAs, and anti-bot
+  bypass flows.
+- Scraped content must be minimized to the fields required by the product
+  spec; raw HTML archives are not stored unless a source is clearly licensed
+  and the fixture is intentionally needed for tests.
+
 ## Input Validation
 
 - Every Server Action and Route Handler validates input with Zod at the

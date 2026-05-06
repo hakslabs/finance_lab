@@ -278,6 +278,17 @@ STOCKLAB (app.stocklab.io)
 | Naver/Daum RSS | 한국 뉴스 헤드라인 | 무제한 | 헤드라인 + 링크만 |
 | Gemini 1.5 Flash | 리포트 · 뉴스 AI 요약 | 1,500 / 일 | 무료 티어 OK |
 | arXiv / SSRN RSS | 학술 RSS | 무제한 | 공식 RSS OK |
+| FinanceDatabase | 미국 · 한국 종목 기준 DB seed | 로컬 CSV / 패키지 | MIT · 출처 보존 |
+
+### Source Reduction Addendum
+
+| 항목 | 계획 |
+| --- | --- |
+| Supabase 대상 | `https://luiaofafdbikmqusurpi.supabase.co` 를 `SUPABASE_URL` 로 연결하되 키는 Vercel / GitHub Secrets 에만 둔다 |
+| FinanceDatabase | `United States` 와 `South Korea` 행만 필터링하여 `securities_master` 와 `security_aliases` 에 seed 한다 |
+| Docling | PDF / 문서를 Markdown + table JSON 으로 변환하고 결과를 `reports.markdown`, `reports_tables` 에 저장한다 |
+| Scrapling | 허용된 IR 페이지 · RSS / HTML 인덱스 · 리포트 랜딩 페이지만 robots.txt 와 약관 준수 범위에서 수집 후보로 평가한다 |
+| 운영 로그 | FinanceDatabase import, Docling 변환, Scrapling crawl 은 모두 `external_source_runs` 에 기록한다 |
 
 ### Disallowed Sources
 
@@ -293,7 +304,7 @@ STOCKLAB (app.stocklab.io)
 [외부 API · 공식 무료]
         │  scheduled fetch
         ▼
-[Vercel Cron + GitHub Actions Worker]
+[Vercel Cron + GitHub Actions Worker + approved import workers]
         │  upsert
         ▼
 [Supabase · Postgres (캐시 + 사용자 데이터)]
@@ -312,6 +323,14 @@ STOCKLAB (app.stocklab.io)
 1. 매일 06:00 KR · 06:30 GLOBAL — 리포트 RSS 30+ 폴링하여 신규 PDF URL 을 `reports` 테이블에 insert.
 2. 매일 07:00 — Docling 워커가 PDF → Markdown + 표 JSON 추출 후 `reports.markdown` 과 `reports.tables_json` 에 upsert. (GitHub Actions 무료 2,000 분 / 월, 작업당 약 1 ~ 2 분)
 3. 매일 07:30 — Gemini 1.5 Flash 가 한글 요약 + 영문 번역 + 핵심 포인트 5 개 + 자동 티커 태깅을 생성하여 `reports.summary` 등에 upsert.
+
+### Security Master Pipeline
+
+1. 주 1 회 또는 수동 실행 — FinanceDatabase 원본 revision 을 확인한다.
+2. `equities.csv`, `etfs.csv`, `indices.csv` 중 필요한 파일에서 `United States` 와 `South Korea` 만 추출한다.
+3. 중복 심볼 · 비주요 상장 · 오래된 market / exchange 값을 audit 한 뒤 `securities_master` 에 upsert 한다.
+4. 한글명, 별칭, 우선순위 검색어는 `security_aliases` 에 분리한다.
+5. 앱의 검색 · 스크리너 · quote target list 는 `securities_master` 를 우선 사용하고, 실제 시세 / 재무 / 뉴스는 기존 허용 API 로 갱신한다.
 
 ## Database Schema
 
@@ -336,6 +355,9 @@ Supabase Postgres. 모든 사용자 테이블에 RLS 적용.
 | `cron_logs` | id · job · started_at · finished_at · status · err | 관리자 모니터 |
 | `api_quota` | provider · day · used · limit | 일별 사용량 누적 |
 | `alerts_queue` | id · user_id · rule · status · evaluated_at | 알림 평가 큐 |
+| `securities_master` | symbol · name · asset_class · country · currency · exchange · market · sector · industry · source_revision | 미국 · 한국 종목 기준 DB |
+| `security_aliases` | symbol · alias · alias_type · source | 검색 별칭 · 현지명 · 대체 상장 |
+| `external_source_runs` | provider · source_url · source_revision · started_at · finished_at · status · robots_policy · err | import / 변환 / crawl 실행 로그 |
 
 ### User Data Tables (RLS)
 
@@ -418,6 +440,8 @@ Vercel Cron + GitHub Actions Worker 조합. 모든 작업의 호출량 합계가
 | Cron 무거움 | GitHub Actions Worker | Docling · Gemini 처리 (2K 분 / 월 무료) |
 | AI | Gemini 1.5 Flash | 1,500 req / 일 무료 + 한국어 우수 |
 | PDF 추출 | Docling (Python) | 표 JSON 까지 추출 |
+| HTML 수집 후보 | Scrapling (Python / MCP 후보) | 허용된 페이지에서 구조화 추출 · robots / 약관 준수 전제 |
+| 기준 종목 DB | FinanceDatabase | 반복 discovery 호출 감소 · 미국 / 한국 universe seed |
 | 모니터링 | Vercel Analytics + Supabase Logs | 기본 |
 | 에러 추적 | Sentry Free | 5K event / 월 |
 | 분석 | Plausible (자체 호스팅 옵션) 또는 Umami | 가벼운 트래커 |
@@ -436,7 +460,7 @@ Vercel Cron + GitHub Actions Worker 조합. 모든 작업의 호출량 합계가
     │
     └──► [Preview deploys per PR]
 
-[Supabase project: stocklab]
+[Supabase project: stocklab · https://luiaofafdbikmqusurpi.supabase.co]
     ├─ Postgres (DB · RLS)
     ├─ Auth (Email · Google · Apple · Kakao)
     ├─ Storage (PDF 백업, 옵션)
@@ -449,7 +473,7 @@ Vercel Cron + GitHub Actions Worker 조합. 모든 작업의 호출량 합계가
 | --- | --- | --- | --- |
 | dev | `localhost:3000` | Supabase project (dev) | 개발 |
 | preview | `*.vercel.app` | Supabase project (preview) | PR 단위 |
-| production | `app.stocklab.io` | Supabase project (prod) | 운영 |
+| production | `app.stocklab.io` | `https://luiaofafdbikmqusurpi.supabase.co` | 운영 |
 
 ### Secrets / Environment Variables
 
@@ -487,6 +511,7 @@ Vercel Cron + GitHub Actions Worker 조합. 모든 작업의 호출량 합계가
 | 에러율 | Sentry | 5xx > 1% / 15 min |
 | 페이지 성능 | Vercel Analytics + Lighthouse CI | LCP > 2.5s / TTI > 4s 시 점검 |
 | DB 사용량 | Supabase 대시보드 | 350 MB 이상 시 archive 정책 발동 |
+| 외부 소스 실행 | `external_source_runs` + Admin 대시보드 | 실패 1 회 warn · 3 회 연속 시 source 비활성화 |
 
 ### Backups
 
@@ -502,6 +527,9 @@ Vercel Cron + GitHub Actions Worker 조합. 모든 작업의 호출량 합계가
 | Supabase 다운 | 정적 fallback 페이지 (지난 종가 · 오늘 일정만) |
 | Vercel 다운 | 사용자에게는 에러 화면 · 별도 대안 없음 (지인 서비스) |
 | 데이터 품질 이상 | Admin → 데이터 품질 페이지 → 13F 보정 · 뉴스 핀/숨김 |
+| FinanceDatabase import 실패 | 마지막 `securities_master` snapshot 유지 · 삭제성 변경 차단 |
+| Docling 변환 실패 | 원문 링크만 유지 · `needs_review` 표시 · Gemini 요약 skip |
+| Scrapling 수집 차단 / 약관 불명 | source 비활성화 · 링크만 보존 |
 
 ### Maintenance Windows
 
@@ -528,6 +556,8 @@ Vercel Cron + GitHub Actions Worker 조합. 모든 작업의 호출량 합계가
 | --- | --- |
 | 데이터 라이선스 | KRX · DART · EDGAR · FRED 공공 재배포 OK / Finnhub Free 약관 준수 / RSS 헤드라인 + 링크만 |
 | 사용 금지 | 네이버 / 다음 본문 스크래핑 · yfinance · 증권사 OpenAPI |
+| 스크래핑 제한 | Scrapling 은 allowlist · robots.txt · 약관 준수 범위에서만 사용, paywall / login / CAPTCHA / anti-bot 우회 금지 |
+| 오픈소스 출처 | Docling · FinanceDatabase · Scrapling 은 라이선스와 원본 revision 을 기록 |
 | 면책 | 모든 시세는 참고용 · 투자 판단 책임은 사용자 (페이지 푸터 + 첫 로그인 안내) |
 | 개인정보 | 최소 수집 (이메일 · 닉네임) · 거래 내역은 사용자 본인만 접근 (RLS) |
 
@@ -550,6 +580,8 @@ Vercel Cron + GitHub Actions Worker 조합. 모든 작업의 호출량 합계가
 - [ ] PWA 푸시 알림 vs 이메일 알림 우선순위 결정
 - [ ] 거래 내역 자동 가져오기 (CSV) 표준 포맷 정의 (키움 · 미래에셋 · 토스 · IBKR 등)
 - [ ] Docling 표 추출 정확도 샘플 검증 후 fallback 정책 결정
+- [ ] FinanceDatabase 의 한국 / 미국 종목 coverage 와 stale 심볼 정리 기준 확정
+- [ ] Scrapling 을 Python 패키지로만 쓸지 MCP 형태로도 운영할지 결정
 - [ ] 약관 / 개인정보 처리방침 초안 작성 (지인 한정이라도 필요)
 
 ## Roadmap
@@ -566,6 +598,7 @@ Vercel Cron + GitHub Actions Worker 조합. 모든 작업의 호출량 합계가
 | M7 · 관리자 | /admin · CRUD · 모니터 | 1 주 |
 | M8 · 모바일 + 상태 가이드 | PWA · 모바일 두 화면 · 빈 / 에러 상태 적용 | 1 주 |
 | M9 · 베타 오픈 | 지인 50 명 초대 · 피드백 수집 | — |
+| X1 · 데이터 수집 절감 | Supabase 대상 연결 · FinanceDatabase seed · Docling Markdown · Scrapling 검증 | 병행 |
 
 ## References
 

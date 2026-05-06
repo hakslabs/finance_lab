@@ -12,9 +12,15 @@ sentiment data, satisfying the spec in
 - Plan reference: `STOCKLAB-Project-Plan.md` Roadmap row M1 (2 weeks).
 - Reliability and quota constraints: see `docs/RELIABILITY.md`.
 - UI spec: see `docs/product-specs/home-dashboard.md`.
+- Symbol universe and source-reduction plan: see
+  [EP-0011](./EP-0011-data-source-reduction.md).
 
 ## Tasks
 
+- [ ] Seed `securities_master` from FinanceDatabase for US and South Korea
+      before quote cron targets are finalized.
+- [ ] Build the quote target list from `securities_master` plus curated
+      defaults instead of hard-coded symbols.
 - [ ] Implement `app/api/cron/quotes-us/route.ts` — Finnhub fetch every 15
       minutes during sessions. Bearer-protected. Updates `quotes` and
       `api_quota`.
@@ -45,6 +51,7 @@ sentiment data, satisfying the spec in
 
 - The home dashboard renders all 9 widgets with live data on a logged-in
   Vercel preview deployment.
+- Stock search and default quote targets are backed by `securities_master`.
 - All four crons run on schedule for at least 48 hours without failures.
 - `api_quota` shows daily usage well below the limits documented in
   `docs/RELIABILITY.md`.

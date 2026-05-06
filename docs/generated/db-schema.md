@@ -25,6 +25,9 @@ output.
 | `cron_logs` | `id`, `job`, `started_at`, `finished_at`, `status`, `err` | Admin monitoring |
 | `api_quota` | `provider`, `day`, `used`, `limit` | Daily usage accumulator |
 | `alerts_queue` | `id`, `user_id`, `rule`, `status`, `evaluated_at` | Alert evaluation queue |
+| `securities_master` | `symbol`, `name`, `asset_class`, `country`, `currency`, `exchange`, `market`, `sector`, `industry_group`, `industry`, `website`, `market_cap_bucket`, `isin`, `cusip`, `figi`, `composite_figi`, `shareclass_figi`, `source`, `source_revision`, `source_updated_at` | US / South Korea security universe seeded from FinanceDatabase and curated by admin |
+| `security_aliases` | `symbol`, `alias`, `alias_type`, `source` | Search aliases, local names, alternate listings |
+| `external_source_runs` | `id`, `provider`, `source_url`, `source_revision`, `started_at`, `finished_at`, `status`, `robots_policy`, `license_note`, `err` | Import / scrape / conversion run log |
 
 ## User Data Tables (RLS)
 
@@ -54,6 +57,18 @@ output.
   `holdings` row for the user (qty, avg_px, currency-weighted).
 - `cron_logs` is append-only from cron handlers. The admin UI may delete
   rows older than 90 days as housekeeping.
+- `external_source_runs` is append-only from FinanceDatabase imports,
+  Docling conversions, and Scrapling crawls.
+
+## Data Import Notes
+
+- FinanceDatabase seed imports target `securities_master` and
+  `security_aliases`. Only `United States` and `South Korea` rows are in
+  initial scope.
+- Docling report conversion writes Markdown into `reports.markdown` and
+  table JSON into `reports_tables`.
+- Scrapling output must be normalized before insert. Raw HTML is not part of
+  the schema unless a future migration adds a license-cleared fixture table.
 
 ## Generation Plan
 

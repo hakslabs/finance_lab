@@ -31,6 +31,12 @@ can use end-to-end.
 | M8 | Mobile + State Library | PWA, mobile home and stock detail, empty / error states | 1 wk | Planned | EP-0009 (TBD) |
 | M9 | Beta Open | Invite ~50 friends, collect feedback | — | Planned | EP-0010 (TBD) |
 
+## Cross-Cutting Plans
+
+| ID | Plan | Scope | Status | Link |
+| --- | --- | --- | --- | --- |
+| EP-0011 | Data Source Reduction | Supabase target connection, FinanceDatabase US / South Korea seed, Docling Markdown pipeline, Scrapling evaluation | Active | [EP-0011](./exec-plans/active/EP-0011-data-source-reduction.md) |
+
 ## Plan
 
 The milestones run sequentially. M0 must finish before M1 begins, and so
@@ -47,11 +53,15 @@ milestone closes, the EP moves to `docs/exec-plans/completed/`.
 - [ ] M7 · Admin Console
 - [ ] M8 · Mobile + State Library
 - [ ] M9 · Beta Open
+- [ ] EP-0011 · Data Source Reduction
 
 ## Progress Notes
 
 - 2026-05-06 — Harness scaffolding generated from
   `STOCKLAB-Project-Plan.md`. M0 and M1 promoted to active EPs.
+- 2026-05-06 — Added EP-0011 for the owner-provided Supabase project URL,
+  Docling Markdown conversion, FinanceDatabase US / South Korea symbol
+  seeding, and Scrapling evaluation.
 
 ## Open Questions
 
@@ -61,3 +71,5 @@ Tracked in `docs/DESIGN.md` (Open Questions) and
 - Privacy policy + ToS drafts before M9 (TD-007).
 - CSV transaction import schema before M5 (TD-005).
 - Push notifications vs. email decision before M6 (TD-006).
+- Scrapling package vs. MCP operating mode before external HTML ingestion
+  scales beyond proof of concept (TD-010).

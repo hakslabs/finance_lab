@@ -19,6 +19,9 @@ keep that promise.
 | DART | 10K / day | Comfortable |
 | SEC EDGAR | Unlimited | No quota risk |
 | FRED | Unlimited | No quota risk |
+| FinanceDatabase | Local package / CSV import | No request quota; DB size and freshness audit matter |
+| Docling | GitHub Actions worker | CPU / minutes bound; never run in Vercel Cron |
+| Scrapling | GitHub Actions or MCP-assisted extraction | Must be domain-allowlisted and robots-aware |
 
 ## Cron Budget
 
@@ -35,9 +38,23 @@ keep that promise.
 | Reports RSS poll | 2 / day | ~30 | ~60 | RSS | ∞ | Safe |
 | Docling worker | 1 / day | varies | ~1–2 min / report | none | GH Actions 2K min | Safe |
 | Gemini summary | 1 / day | ~65 | ~65 | Gemini | 1,500 / day | Safe |
+| FinanceDatabase security master import | Weekly or manual | 1 package / CSV read | 0 API calls | FinanceDatabase | Local import | Safe |
+| Scrapling allowed-source crawl | Manual until proven | TBD | TBD | Source-specific | Source-specific | Unknown |
 
 "Sessions" means KST 09:00–15:30 + 22:30–05:00 (≈ 8 h, 32 fifteen-minute
 slots). Adding any new external call requires updating this table.
+
+## Data Reduction Strategy
+
+- `securities_master` is the first filter for search, screener dimensions,
+  default watchlist suggestions, and quote targets.
+- FinanceDatabase seed data reduces discovery calls, but it does not replace
+  quote, filing, financial statement, or news refresh jobs.
+- Docling converts report files once and stores Markdown / table JSON so the
+  app does not re-parse PDFs on request.
+- Scrapling is evaluated for allowed HTML extraction only. It must not expand
+  the free-tier plan until measured GitHub Actions minutes, DB growth, and
+  source terms are documented.
 
 ## Caching Strategy
 
@@ -47,6 +64,10 @@ slots). Adding any new external call requires updating this table.
 - **Financials** — invalidate after the 03:00 KST refresh.
 - **News** — TTL 30 minutes.
 - **Reports** — invalidate as the Gemini summary lands.
+- **Security master** — refresh weekly or manually after source revision
+  changes; user-facing search falls back to the last successful import.
+- **External scrape outputs** — cache per source and revision; avoid
+  re-hitting pages during parser development.
 - **Stock detail bundle** (`/api/stock/[ticker]`) — 5-minute Edge cache to
   smooth the fan-out into the eight tabs.
 
@@ -62,6 +83,7 @@ slots). Adding any new external call requires updating this table.
 | --- | --- | --- |
 | Cron failure | `cron_logs` | 1 fail → warn; 3 consecutive → email alert |
 | API usage | `api_quota` | 80 % of daily limit → warn; 100 % → cache-only mode |
+| Source import | `external_source_runs` | Any failure → admin warning; 3 failures → disable source |
 | Error rate | Sentry | 5xx > 1 % over 15 min |
 | Page performance | Vercel Analytics + Lighthouse CI | LCP > 2.5 s or TTI > 4 s |
 | DB usage | Supabase dashboard | ≥ 350 MB triggers archive policy |
@@ -76,6 +98,9 @@ slots). Adding any new external call requires updating this table.
 | Supabase outage | Static fallback page with last close + scheduled events only |
 | Vercel outage | Default error page; no separate failover (acceptable for friends-only) |
 | Data quality issue (e.g., 13F mis-parse) | Admin → data quality page → manual override / hide |
+| FinanceDatabase import fails | Keep last `securities_master` snapshot and block destructive deletes |
+| Docling conversion fails | Keep source link, mark report as `needs_review`, skip Gemini summary |
+| Scrapling crawl blocked or disallowed | Disable that source and keep only the public link |
 
 ## Recovery Runbook
 
