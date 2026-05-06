@@ -60,9 +60,10 @@ Scrapling as the controlled scraping layer for allowed external pages.
 - [ ] Keep live prices, fundamentals, filings, and news on the existing
       allowed source plan; FinanceDatabase must not be treated as fresh market
       data.
-- [ ] Add a Docling worker contract for report ingestion: input URL / file,
+- [x] Add a Docling worker contract for report ingestion: input URL / file,
       output Markdown, output table JSON, source metadata, and parser
       warnings.
+      Contract lives in `docs/design-docs/docling-worker-contract.md`.
 - [ ] Store Docling Markdown in `reports.markdown` and extracted tables in
       `reports_tables`.
 - [ ] Add a 20-document Docling audit set before M4 begins, covering Korean
@@ -132,3 +133,6 @@ Scrapling as the controlled scraping layer for allowed external pages.
   (evaluation, deployment decision, allowlists, paywall prohibition), Reliability
   quota table update, screener/admin curation wiring, and the external
   Supabase URL registration in Vercel/GitHub dashboards.
+- 2026-05-07 slice: Docling worker contract is documented in
+  `docs/design-docs/docling-worker-contract.md`. Runtime worker implementation,
+  persisted report updates, and the 20-document audit set remain pending.

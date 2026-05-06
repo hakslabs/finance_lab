@@ -9,6 +9,8 @@ philosophies, and explanatory notes.
 
 - [Core Beliefs](./core-beliefs.md) — non-negotiable product, engineering,
   and verification principles.
+- [Docling Worker Contract](./docling-worker-contract.md) — report conversion
+  input/output, persistence, and audit gates.
 
 ## Planned
 
@@ -17,7 +19,7 @@ philosophies, and explanatory notes.
 - [ ] `theme-system.md` — single `data-theme` toggle and CSS variable
       contract. Add when more than two component packs are themed.
 - [ ] `report-pipeline.md` — RSS → Docling → Gemini design rationale and
-      fallbacks. Add when M4 (reports) starts.
+      fallbacks beyond the worker contract. Add when M4 (reports) starts.
 - [ ] `13f-parsing.md` — SEC EDGAR 13F ingestion strategy. Add when M4
       (masters / 13F) starts.
 
