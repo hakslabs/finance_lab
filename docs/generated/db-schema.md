@@ -47,14 +47,19 @@ output.
 
 ## RLS Policies (Summary)
 
-- All user tables: `user_id = auth.uid()` for SELECT, INSERT, UPDATE, DELETE.
+- User-managed tables use `user_id = auth.uid()` for SELECT, INSERT, UPDATE,
+  DELETE. `holdings` is trigger-maintained from `transactions` and read-only to
+  users.
 - System tables: anonymous SELECT only.
 - Admin tables and writes: gated by `auth.jwt() ->> 'role' = 'admin'`.
 
 ## Triggers and Computed Tables
 
-- `transactions` insert/update/delete triggers recompute the matching
-  `holdings` row for the user (qty, avg_px, currency-weighted).
+- `transactions` insert/update/delete triggers run an M0 placeholder recompute
+  for affected `(user_id, symbol, currency)` holdings: buy/sell rows update
+  qty and avg_px, cash/div rows are ignored, and non-positive positions are
+  removed. Full realized gains, cash ledger, dividends, and performance logic
+  ship in M5.
 - `cron_logs` is append-only from cron handlers. The admin UI may delete
   rows older than 90 days as housekeeping.
 - `external_source_runs` is append-only from FinanceDatabase imports,

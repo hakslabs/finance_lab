@@ -47,8 +47,12 @@ deployable Vercel app.
       routing can be tested before real OAuth credentials are ready.
 - [x] Keep placeholders for Supabase Auth providers: Email, Google, Apple,
       Kakao. Full provider setup ships in the final auth pass.
-- [ ] Add Edge Function or DB trigger that recomputes `holdings` from
+- [x] Add Edge Function or DB trigger that recomputes `holdings` from
       `transactions` (placeholder OK; full logic ships in M5).
+      Implemented as a DB trigger placeholder: buy/sell rows recompute the
+      affected `(user_id, symbol, currency)` holding; cash/div rows are ignored;
+      full realized-gain, cash-ledger, dividend, and performance logic remains
+      M5 scope.
 - [ ] Create Vercel project linked to the GitHub repo.
       Blocked: needs owner to confirm Vercel project exists and env vars are
       set. `vercel.json` cron config is committed and ready.
@@ -99,7 +103,7 @@ deployable Vercel app.
   later EP.
 - 2026-05-07 reconciliation: repository-local M0 code is complete for schema,
   RLS, auth loop, login page, cron health, smoke check, Sentry SDK wiring,
-  CI workflow, Lighthouse workflow, and `vercel.json`. Remaining items are
-  owner/dashboard confirmations (Vercel project, hosted secrets, Sentry captured
-  error, Lighthouse preview run) plus the holdings recomputation placeholder
-  deferred to M5 scope.
+  CI workflow, Lighthouse workflow, `vercel.json`, and the holdings
+  recomputation placeholder. Remaining items are owner/dashboard confirmations
+  (Vercel project, hosted secrets, Sentry captured error, Lighthouse preview
+  run). Full M5 portfolio accounting remains deferred.
