@@ -11,6 +11,8 @@ philosophies, and explanatory notes.
   and verification principles.
 - [Docling Worker Contract](./docling-worker-contract.md) — report conversion
   input/output, persistence, and audit gates.
+- [Scrapling Allowlist Contract](./scrapling-allowlist-contract.md) — compliant
+  HTML extraction boundaries and banned uses.
 
 ## Planned
 

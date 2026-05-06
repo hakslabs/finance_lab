@@ -74,11 +74,13 @@ Scrapling as the controlled scraping layer for allowed external pages.
       login or anti-bot bypass.
 - [ ] Decide whether Scrapling runs as a Python package in GitHub Actions,
       a dedicated MCP server for operator-assisted extraction, or both.
-- [ ] For Scrapling crawls, require domain allowlists, `robots_txt_obey`,
+- [x] For Scrapling crawls, require domain allowlists, `robots_txt_obey`,
       crawl-delay handling, cached development mode, and per-source output
       schemas.
-- [ ] Forbid Scrapling use for bypassing paywalls, login walls, CAPTCHAs, or
+      Contract lives in `docs/design-docs/scrapling-allowlist-contract.md`.
+- [x] Forbid Scrapling use for bypassing paywalls, login walls, CAPTCHAs, or
       sites whose terms disallow collection.
+      Banned uses are documented in the Scrapling allowlist contract.
 - [x] Add `external_source_runs` logging for the FinanceDatabase import so it
       records source, URL, revision, started / finished timestamps, status, and
       error. Docling and Scrapling runs will extend the same table later.
@@ -136,3 +138,7 @@ Scrapling as the controlled scraping layer for allowed external pages.
 - 2026-05-07 slice: Docling worker contract is documented in
   `docs/design-docs/docling-worker-contract.md`. Runtime worker implementation,
   persisted report updates, and the 20-document audit set remain pending.
+- 2026-05-07 slice: Scrapling allowlist and banned-use contract is documented in
+  `docs/design-docs/scrapling-allowlist-contract.md`. Source evaluation,
+  package-vs-MCP decision, proof of concept, and reliability measurements remain
+  pending.
