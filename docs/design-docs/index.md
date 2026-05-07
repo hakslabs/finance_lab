@@ -15,6 +15,9 @@ philosophies, and explanatory notes.
   HTML extraction boundaries and banned uses.
 - [Scrapling Operating Mode Decision](./scrapling-operating-mode-decision.md) —
   GitHub Actions Python package as default; MCP deferred; graduation gates.
+- [Scrapling Evaluation Plan](./scrapling-evaluation-plan.md) — evaluation
+  records, intake workflow, pass/reject criteria, and PoC requirements for the
+  three EP-0011 allowed source classes.
 - [Docling Audit Set](./docling-audit-set.md) — 20-document audit manifest,
   metadata fields, acceptance rubric, and gate thresholds.
 

@@ -117,8 +117,8 @@ following remain banned regardless of operating mode:
 - Proxy rotation to evade limits, bans, geofencing, or detection.
 - Cookie injection or browser automation to cross login walls.
 - Paywall bypass or extraction from pages whose terms disallow collection.
-- Collection from forbidden sources (Naver/Daum body pages, yfinance, KIS-style
-  brokerage APIs).
+- Collection from forbidden sources (Naver/Daum body pages, yfinance/Yahoo
+  Finance, KIS-style brokerage APIs).
 
 If a source blocks honest HTTP or dynamic access, STOCKLAB disables that source.
 No operating mode provides an escalation path to stealth.

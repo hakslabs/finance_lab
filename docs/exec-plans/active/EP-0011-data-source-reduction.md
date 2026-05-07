@@ -81,6 +81,13 @@ Scrapling as the controlled scraping layer for allowed external pages.
 - [ ] Evaluate Scrapling on three allowed source types: official IR pages,
       public RSS / HTML indexes, and report landing pages that do not require
       login or anti-bot bypass.
+      Plan/spec is documented in
+      `docs/design-docs/scrapling-evaluation-plan.md`. Defines evaluation
+      records with placeholder IDs, a seven-step intake workflow, pass/reject
+      criteria, banned-use reaffirmation, and per-source-class PoC requirements.
+      Actual candidate identification, legal/robots preflight, fetch-mode
+      testing, output schema design, dry-run execution, sample output review,
+      and reliability measurements remain pending.
 - [x] Decide whether Scrapling runs as a Python package in GitHub Actions,
       a dedicated MCP server for operator-assisted extraction, or both.
       Decision: GitHub Actions Python package is the default mode. MCP is
@@ -170,3 +177,13 @@ Scrapling as the controlled scraping layer for allowed external pages.
   reports pipeline spec (>= 80% table extraction accuracy, 20 documents before
   M4). Actual source selection, owner approval, download, Docling conversion,
   and human review are not started.
+- 2026-05-07 slice: Scrapling evaluation plan/spec is documented in
+  `docs/design-docs/scrapling-evaluation-plan.md`. Defines evaluation records
+  with placeholder IDs, a seven-step intake workflow (candidate intake, legal
+  and robots preflight, fetch-mode choice, output schema design, dry-run plan,
+  review, reliability measurement plan), pass/reject criteria with labeled
+  rejection reasons, banned-use reaffirmation from the allowlist contract, and
+  per-source-class PoC requirements (one reviewed sample or rejection per
+  source class before scheduling). Actual candidate identification, preflight
+  checks, fetch attempts, output schema implementation, dry-run execution,
+  sample output review, and reliability measurements remain pending.
