@@ -11,11 +11,10 @@ Track tradeoffs that were made knowingly and need follow-up. Items here are
 | TD-002 | KR analyst consensus data is missing | Plan §Open Questions | "목표주가" tab is partial for KR tickers | Investigate brokerage RSS / IR scraping at M2 |
 | TD-003 | NewsAPI 100 / day quota is tight | Plan §Cron table | Global news pipeline can hit the wall on busy days | Lengthen TTL, prefer Naver/Daum RSS for KR |
 | TD-004 | Docling table extraction accuracy unverified | Plan §Open Questions | "공시·실적" tables may be wrong for some PDFs | Sample audit on a 20-PDF set at M4 entry |
-| TD-005 | CSV import format for transactions is undecided | Plan §Open Questions | Manual entry friction on M5 launch | Define schema for Kiwoom / Mirae / Toss / IBKR at M5 |
 | TD-006 | Push notifications vs. email priority undecided | Plan §Open Questions | Alerts ship without a delivery channel | Decide before M6 (settings + alerts) |
 | TD-007 | Privacy policy and ToS drafts are missing | Plan §Open Questions | Cannot legally invite friends in beta | Draft before M9 beta open |
 | TD-008 | FinanceDatabase freshness and Korea listing quality are unverified | EP-0011 | Search and screener may expose stale or duplicate symbols | Audit before M1 quote target finalization |
-| TD-009 | Docling parser quality is not yet measured on target reports | EP-0011 | Report Markdown and tables may require manual repair | 20-document audit before M4 |
+| TD-009 | Docling parser quality is not yet measured on target reports | EP-0011 | Report Markdown and tables may require manual repair | 20-document audit before production report ingestion |
 | TD-010 | Scrapling operating mode and compliance boundaries are undecided | EP-0011 | Scraping workflows may drift into brittle or disallowed collection | Decide package vs. MCP and allowlist before scaling external HTML ingestion |
 
 ## Prioritized Debt
@@ -27,15 +26,16 @@ Order in which open debt should be addressed:
 3. TD-008 — gates M1 search and quote target quality.
 4. TD-007 — required gate for M9 beta open.
 5. TD-006 — gates M6 (alerts).
-6. TD-005 — gates a pleasant M5 (transactions).
-7. TD-004 — gates M4 confidence.
-8. TD-001 / TD-002 — accept and document as a known limitation in
+6. TD-004 — gates M4 confidence.
+7. TD-001 / TD-002 — accept and document as a known limitation in
    `docs/PRODUCT_SENSE.md` until evidence changes.
-9. TD-003 — operational, not blocking; address only if breached.
+8. TD-003 — operational, not blocking; address only if breached.
 
 ## Resolved Debt
 
-(empty)
+| ID | Resolution |
+| --- | --- |
+| TD-005 | Resolved 2026-05-07: imports normalize to canonical `transactions` CSV columns `ts`, `type`, `symbol`, `qty`, `px`, `fee`, and `currency`; broker-specific formats map into this shape before insert. |
 
 ## Conventions
 

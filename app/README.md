@@ -1,12 +1,10 @@
-# App Scaffold
+# App Runtime
 
-This directory is the future Next.js 14 App Router application root for
-STOCKLAB. It is intentionally inert during the repository-structure phase.
+This directory is the Next.js 15 App Router application root for STOCKLAB.
+M0-M5 local runtime surfaces now live here. Add or change runtime files only
+through the execution plan that owns the affected route or shared module.
 
-Do not treat this folder as runnable until M0 adds package files, framework
-config, root layouts, pages, styles, and environment wiring.
-
-## Intended Layout
+## Layout
 
 ```text
 app/

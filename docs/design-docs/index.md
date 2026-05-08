@@ -24,13 +24,14 @@ philosophies, and explanatory notes.
 ## Planned
 
 - [ ] `chart-engine.md` — why a custom SVG chart engine instead of TradingView
-      Lightweight or Chart.js. Add when M2 (stock detail) starts.
+      Lightweight or Chart.js. Add before the interactive chart engine work.
 - [ ] `theme-system.md` — single `data-theme` toggle and CSS variable
       contract. Add when more than two component packs are themed.
 - [ ] `report-pipeline.md` — RSS → Docling → Gemini design rationale and
-      fallbacks beyond the worker contract. Add when M4 (reports) starts.
-- [ ] `13f-parsing.md` — SEC EDGAR 13F ingestion strategy. Add when M4
-      (masters / 13F) starts.
+      fallbacks beyond the worker contract. Add before the production report
+      pipeline starts.
+- [ ] `13f-parsing.md` — SEC EDGAR 13F ingestion strategy. Add before the
+      production refresh work starts.
 
 ## Domain Guides
 

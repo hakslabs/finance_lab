@@ -17,8 +17,12 @@ export const serverEnvSchema = z.object({
   SUPABASE_PUBLISHABLE_KEY: requiredSecret,
   SUPABASE_SECRET_KEY: requiredSecret,
   CRON_SECRET: requiredSecret,
+  KRX_API_KEY: requiredSecret,
+  FINNHUB_API_KEY: requiredSecret,
   SENTRY_DSN: z.preprocess(emptyStringToUndefined, z.string().url().optional()),
-  NEXT_PUBLIC_SENTRY_DSN: z.preprocess(emptyStringToUndefined, z.string().url().optional())
+  NEXT_PUBLIC_SENTRY_DSN: z.preprocess(emptyStringToUndefined, z.string().url().optional()),
+  OAUTH_GOOGLE_CLIENT_ID: z.preprocess(emptyStringToUndefined, z.string().min(8).optional()),
+  OAUTH_GOOGLE_CLIENT_SECRET: z.preprocess(emptyStringToUndefined, z.string().min(8).optional())
 });
 
 export const publicEnvSchema = serverEnvSchema.pick({

@@ -44,6 +44,17 @@ captured anywhere navigable.
   remain visible.
 - Master profile Markdown renders through DOMPurify.
 
+## Local Adaptation — EP-0005
+
+- This local slice implements read-only helpers and route UI for `/masters` and
+  `/masters/[id]` over `master_profiles`, `master_holdings`,
+  `securities_master`, and `quotes`.
+- Under temporary M0 auth, Follow is exposed as disabled/auth-required. Real
+  follow/unfollow writes remain gated until OAuth-backed Supabase sessions are
+  available.
+- The production 24-master completeness check and quarterly 13F cron evidence
+  require staged/production data and are not claimed by local tests.
+
 ## Done When
 
 - 24 masters have at least one quarter of `master_holdings` rows.

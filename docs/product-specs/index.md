@@ -12,19 +12,18 @@ consistent shape: **Problem · Scope · Constraints · Done When**.
 | PS-03 | [Portfolio (4 tabs)](./portfolio.md) | M5 | Drafted |
 | PS-04 | [Reports Pipeline](./reports-pipeline.md) | M4 | Drafted |
 | PS-05 | [Masters & 13F](./masters-13f.md) | M4 | Drafted |
+| PS-06 | [Analysis Hub + 4 Tabs](./analysis.md) | M3 | Drafted |
+| PS-07 | [Screener](./screener.md) | M3 | Drafted |
+| PS-08 | [Learn](./learn.md) | M6 | Drafted |
+| PS-09 | [My Page Hub + Settings](./my-page-settings.md) | M6 | Drafted |
+| PS-10 | [Admin Console](./admin-console.md) | M7 | Drafted |
+| PS-11 | [Mobile + PWA + State Library](./mobile-pwa.md) | M8 | Drafted |
+| PS-12 | [Beta Readiness](./beta-readiness.md) | M9 | Drafted |
 
 ## Planned Specs
 
-These are referenced in `STOCKLAB-Project-Plan.md` but do not yet have a
-dedicated spec. Add one when the milestone starts.
-
-- [ ] PS-06 Analysis Hub + 4 sub-tabs (M3)
-- [ ] PS-07 Screener (M3)
-- [ ] PS-08 Learn (M6)
-- [ ] PS-09 My Page Hub + Transactions + Settings (M5–M6)
-- [ ] PS-10 Admin Console (M7)
-- [ ] PS-11 Mobile (Home + Stock Detail PWA) (M8)
-- [ ] PS-12 Empty / Error States Library (M8)
+All planned specs from the original project plan now have dedicated spec
+files. No remaining TBD entries.
 
 ## Archived Specs
 

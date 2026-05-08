@@ -28,6 +28,13 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
     redirect(safeRedirectTarget(params?.next));
   }
 
+  async function startTemporaryAdminSession() {
+    "use server";
+
+    await setTemporaryAuthCookie("admin");
+    redirect(safeRedirectTarget(params?.next ?? "/admin"));
+  }
+
   return (
     <div className="sl-center" style={{ minHeight: "100vh", padding: "var(--sl-space-6)" }}>
       <main style={{ width: "100%", maxWidth: 400 }}>
@@ -243,6 +250,17 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
               className="sl-btn sl-btn-primary sl-btn-block sl-btn-lg"
             >
               Continue with temporary session
+            </button>
+          </form>
+
+          {/* Admin temporary session — for /admin verification only */}
+          <form action={startTemporaryAdminSession} style={{ marginTop: "var(--sl-space-3)" }}>
+            <button
+              type="submit"
+              className="sl-btn sl-btn-ghost sl-btn-block"
+              style={{ fontSize: 12, color: "var(--sl-muted)" }}
+            >
+              Continue as temporary admin (M7 verification)
             </button>
           </form>
         </section>

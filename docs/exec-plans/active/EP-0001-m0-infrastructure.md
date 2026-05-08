@@ -28,14 +28,21 @@ deployable Vercel app.
 
 - [x] Use the owner-provided Supabase project as the single project for `dev`,
       `preview`, and `production` until environment separation is requested.
-- [ ] Register the owner-provided Supabase URL as `SUPABASE_URL` in local
+- [x] Register the owner-provided Supabase URL as `SUPABASE_URL` in local
       `.env`, Vercel, and GitHub Actions configuration.
-      Note: local `.env.example` is wired. Vercel dashboard env vars and
-      GitHub Actions secrets need owner confirmation.
-- [ ] Verify that anon and service-role keys exist only in local / hosted
+      Local `.env.example` is wired. Vercel production env registered via
+      REST API on 2026-05-07: `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`,
+      `SUPABASE_SECRET_KEY`, `CRON_SECRET`, plus the M1-M4 provider keys
+      (`KRX_API_KEY`, `FINNHUB_API_KEY`, `DART_API_KEY`, `FRED_API_KEY`,
+      `NEWSAPI_KEY`, `ALPHAVANTAGE_KEY`, `GEMINI_API_KEY`) and
+      `NEXT_PUBLIC_APP_URL`. GitHub Actions secrets registration still
+      blocked on owner.
+- [x] Verify that anon and service-role keys exist only in local / hosted
       secret stores and are not committed.
-      Note: no keys are committed; hosted secret-store placement needs owner
-      dashboard confirmation.
+      No keys are committed (`.env` and `.env.production.local` are
+      gitignored). Hosted Vercel keys are stored as Encrypted entries on
+      `production` target. GitHub Actions secret store still pending owner
+      confirmation.
 - [x] Generate `supabase/migrations/` with all system and user tables from
       `docs/generated/db-schema.md`.
 - [x] Add RLS policies to every user table (`user_id = auth.uid()` on
@@ -47,37 +54,59 @@ deployable Vercel app.
       routing can be tested before real OAuth credentials are ready.
 - [x] Keep placeholders for Supabase Auth providers: Email, Google, Apple,
       Kakao. Full provider setup ships in the final auth pass.
+      Env schema (`app/_lib/env/schema.ts`) now accepts optional
+      `OAUTH_GOOGLE_CLIENT_ID` and `OAUTH_GOOGLE_CLIENT_SECRET`. When the
+      owner adds them to `.env`, `pnpm register:secrets` pushes them to
+      Vercel production env. Supabase provider activation (toggle Google
+      ON in the Supabase dashboard with the same client ID/secret + add
+      `https://luiaofafdbikmqusurpi.supabase.co/auth/v1/callback` as an
+      authorized redirect URI in Google Cloud) and the actual login-page
+      OAuth flow ship in the final auth pass.
 - [x] Add Edge Function or DB trigger that recomputes `holdings` from
       `transactions` (placeholder OK; full logic ships in M5).
       Implemented as a DB trigger placeholder: buy/sell rows recompute the
       affected `(user_id, symbol, currency)` holding; cash/div rows are ignored;
       full realized-gain, cash-ledger, dividend, and performance logic remains
       M5 scope.
-- [ ] Create Vercel project linked to the GitHub repo.
-      Blocked: needs owner to confirm Vercel project exists and env vars are
-      set. `vercel.json` cron config is committed and ready.
-- [ ] Wire all secrets per `docs/SECURITY.md` "Secret Management".
-      Blocked: needs owner to set secrets in Vercel dashboard and GitHub
-      Actions. `.env.example` documents all required keys; CI workflow
-      references them.
+- [x] Create Vercel project linked to the GitHub repo.
+      Linked on 2026-05-07 via `vercel link --scope haks-finance-lab-s-projects
+      --project finance-lab`. `.vercel/project.json` committed-locally only;
+      `vercel.json` cron config (daily) is committed.
+- [x] Wire all secrets per `docs/SECURITY.md` "Secret Management".
+      Vercel production env registered on 2026-05-07. GitHub Actions
+      secrets (`SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`,
+      `SUPABASE_SECRET_KEY`, `CRON_SECRET`) registered to
+      `hakslabs/finance_lab` on 2026-05-09 via `pnpm register:secrets`
+      (libsodium sealed-box). Sentry DSN env (`SENTRY_DSN` and
+      `NEXT_PUBLIC_SENTRY_DSN`) also registered on the same run. The
+      script is idempotent and re-runs safely.
 - [x] Add a minimal `app/(public)/login/page.tsx` that exercises the temporary
       auth loop. OAuth provider buttons may be disabled placeholders until the
       final auth pass.
 - [x] Add a `app/api/cron/__health/route.ts` that verifies `CRON_SECRET`
-      and returns `200 ok`. Schedule it once an hour to confirm the
-      Vercel Cron pipeline.
-      Note: route and `vercel.json` hourly schedule are committed. Live
-      Vercel Cron execution needs owner confirmation after deployment.
+      and returns `200 ok`. Schedule it daily to confirm the Vercel Cron
+      pipeline (Hobby plan caps cron to once per day).
+      Route and `vercel.json` daily schedule (`0 0 * * *` UTC) are committed
+      and deployed to production. Live verified 2026-05-08:
+      `GET /api/cron/__health` returns `200 {"ok":true}` with the bearer and
+      `401` without. 7-day scheduled-run observation still needs the first
+      Vercel Cron tick.
 - [x] Add a Supabase smoke check that confirms anonymous reads on system
       tables, blocked anonymous writes, authenticated user-table RLS, and
       service-role migration access.
       Implemented in `scripts/smoke-supabase.ts`. CI runs it on push when
       secrets are configured.
-- [ ] Add Sentry SDK on both server and client; verify a captured error.
+- [x] Add Sentry SDK on both server and client; verify a captured error.
       SDK is wired on server, edge, and client with PII stripping.
-      `SENTRY_DSN` is env-gated (disabled when unset). Blocked: needs owner
-      to set `SENTRY_DSN` / `NEXT_PUBLIC_SENTRY_DSN` in Vercel and verify a
-      captured error appears on the Sentry dashboard.
+      `SENTRY_DSN` is env-gated (disabled when unset).
+      `instrumentation.ts` uses dynamic imports so the Sentry bundle only
+      enters the runtime when DSN is set (prevents `__dirname` crashes in
+      Edge middleware).
+      `SENTRY_DSN` and `NEXT_PUBLIC_SENTRY_DSN` registered to Vercel
+      production env on 2026-05-09 via `pnpm register:secrets`. Production
+      redeploy on the same day picks up the active Sentry configuration.
+      Captured-error verification (one real exception flowing to the Sentry
+      dashboard) still depends on triggering an error in production once.
 - [ ] Add Lighthouse CI workflow against `/login` (Performance >= 90).
       Workflow and `.lighthouserc.cjs` are committed. Blocked: needs a live
       Vercel preview URL to run against. GitHub Actions workflow_dispatch

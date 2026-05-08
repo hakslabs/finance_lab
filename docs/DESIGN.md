@@ -7,7 +7,8 @@ alternatives a future agent might reasonably propose.
 
 | Date | Decision | Rationale | Alternatives Rejected |
 | --- | --- | --- | --- |
-| 2026-05-06 | Build on Next.js 14 App Router with React Server Components | Server-first rendering pairs well with the Supabase RLS + Edge cache model and keeps client JS small | Pages Router (no streaming RSC), Remix (less Vercel-native), Astro (poor fit for authenticated app) |
+| 2026-05-06 | Build on Next.js App Router with React Server Components | Server-first rendering pairs well with the Supabase RLS + Edge cache model and keeps client JS small | Pages Router (no streaming RSC), Remix (less Vercel-native), Astro (poor fit for authenticated app) |
+| 2026-05-07 | Upgrade runtime to Next.js 15.5.16 | Resolves Next.js production advisories while keeping the App Router/RSC architecture | Remaining on the vulnerable prior major version |
 | 2026-05-06 | Use Supabase Postgres + Auth + RLS as the single backend | Free 500 MB / 50K MAU, integrated OAuth, mature RLS; one platform to monitor | Self-hosted Postgres + Lucia (more ops), Firebase (Google-only OAuth feel + worse SQL), PlanetScale + Clerk (paid tier sooner) |
 | 2026-05-06 | Custom SVG chart engine | TradingView Lightweight watermark conflicts with the friends-only product feel; Chart.js lacks drawing tools and indicator panels | TradingView Lightweight, Chart.js, ECharts |
 | 2026-05-06 | Vercel Cron for short jobs, GitHub Actions for heavy jobs | Vercel Cron is free but capped at 10 s; Docling and Gemini summaries need minutes, which fits GitHub Actions free 2,000 min / month | A single self-hosted cron worker (more ops), inline serverless functions (would exceed 10 s limit) |
@@ -22,6 +23,7 @@ alternatives a future agent might reasonably propose.
 | 2026-05-06 | Defer real OAuth until the final auth pass | Owner will investigate provider setup separately; implementation should keep a temporary auth loop only | Blocking M0 scaffold on complete Google / Apple / Kakao OAuth setup |
 | 2026-05-06 | M1 default tickers come from top KOSPI and S&P 500 constituents by market cap / index weight | Gives sensible default coverage without hand-picked symbols | Arbitrary hard-coded symbols |
 | 2026-05-07 | Scrapling runs as Python package in GitHub Actions; MCP deferred as optional operator-assist | Actions gives auditable logs, free-tier fit, and isolated secrets; MCP adds hosting and policy surface without a reviewed PoC to justify it | MCP as primary, both modes without partitioning, Vercel Cron for browser-dependent jobs |
+| 2026-05-07 | Transaction imports normalize to a canonical CSV before database writes | M5 needs a stable importer contract while real OAuth mutations remain gated; every broker export can be mapped into the existing `transactions` columns | Broker-specific transaction tables, direct `holdings` imports, accepting arbitrary CSV columns |
 
 ## Open Questions
 
@@ -34,7 +36,6 @@ implementation.
 | KR minute-level quotes — any clean source? | M1 review | Project owner |
 | KR analyst consensus — automate or skip? | M2 entry | Project owner |
 | Push notifications vs. email priority | M6 entry | Project owner |
-| CSV transaction import schema | M5 entry | Project owner |
 | Docling table extraction accuracy threshold | M4 entry | Project owner |
 | Privacy policy / ToS draft | M9 entry | Project owner |
 

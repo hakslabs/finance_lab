@@ -4,7 +4,7 @@
 
 | Concern | Choice |
 | --- | --- |
-| Framework | Next.js 14 App Router |
+| Framework | Next.js 15 App Router |
 | Language | TypeScript (strict) |
 | Styling | CSS variables + Pretendard + JetBrains Mono |
 | Theme | Single `data-theme` attribute on `<html>` (`light` / `dark`) |
@@ -44,8 +44,8 @@
 
 ## Component Organization
 
-This is the target implementation structure. Empty directories under `app/`
-are placeholders until their owning execution plan adds runtime files.
+This is the implementation structure. Runtime files under `app/` belong to
+their owning execution plan.
 
 ```text
 app/

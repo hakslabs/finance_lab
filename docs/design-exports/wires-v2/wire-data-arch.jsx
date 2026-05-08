@@ -32,7 +32,7 @@ function WireDataArch() {
       : `M ${x1} ${y1} L ${x2} ${y2}`;
     return (
       <>
-        <svg style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
+        <svg aria-hidden="true" style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
           <defs>
             <marker id="arrow-mid-2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
               <path d="M 0 0 L 10 5 L 0 10 z" fill={color} />
@@ -124,7 +124,7 @@ function WireDataArch() {
         }}>RLS · 행단위 권한</div>
 
         {/* Frontend */}
-        <div style={{ position: 'absolute', left: 985, top: 8, fontSize: 10, color: W.muted, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' }}>Next.js 14 · 화면</div>
+        <div style={{ position: 'absolute', left: 985, top: 8, fontSize: 10, color: W.muted, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' }}>Next.js 15 · 화면</div>
         <Box x={985}  y={32}  w={180} title="홈 · Dashboard"      sub="quotes · indices · sentiment" kind="ui" />
         <Box x={985}  y={100} w={180} title="분석 · Analysis"      sub="quotes · financials"         kind="ui" />
         <Box x={985}  y={168} w={180} title="종목 검색 · Screener" sub="quotes · financials"         kind="ui" />
@@ -146,11 +146,11 @@ function WireDataArch() {
         <Box x={1195} y={508} w={185} title="권한 / 역할"       sub="admin · editor · user" kind="admin" />
 
         {/* Arrows */}
-        {[32, 100, 168, 236, 304, 372, 440, 508].map((y, i) => (
-          <Arrow key={'a'+i} x1={180} y1={y + 30} x2={240} y2={y + 30} dashed />
+        {[32, 100, 168, 236, 304, 372, 440, 508].map((y) => (
+          <Arrow key={`source-${y}`} x1={180} y1={y + 30} x2={240} y2={y + 30} dashed />
         ))}
         {[32, 100, 168, 236, 304, 372, 440, 508].map((y, i) => (
-          <Arrow key={'b'+i} x1={410} y1={y + 30} x2={480} y2={y + 30} color={W.accent} label={i === 0 ? 'upsert' : ''} />
+          <Arrow key={`cache-${y}`} x1={410} y1={y + 30} x2={480} y2={y + 30} color={W.accent} label={i === 0 ? 'upsert' : ''} />
         ))}
         <Arrow x1={680} y1={62}  x2={985}  y2={62}  label="read" />
         <Arrow x1={680} y1={130} x2={985}  y2={62} />
@@ -202,8 +202,8 @@ function WireDataArch() {
                 ['뉴스 (30분)',               '48회/일',  '~10',     '480',   'RSS + NewsAPI',    'RSS ∞ · NewsAPI 100', '✓ 안전', W.up],
                 ['13F (분기 1회)',            '1회/3개월','~10',     '~0.1',  'SEC EDGAR',        '무제한',             '✓ 안전', W.up],
                 ['알림 평가 (1분, DB)',       '1440회/일','0 (DB)',  '0',     '— (외부 호출 없음)', '—',                 '✓ 안전', W.up],
-              ].map(([n, f, p, t, api, q, s, c], i) => (
-                <tr key={i} style={{ borderBottom: `1px solid ${W.hairline}` }}>
+              ].map(([n, f, p, t, api, q, s, c]) => (
+                <tr key={n} style={{ borderBottom: `1px solid ${W.hairline}` }}>
                   <td style={{ padding: '8px 10px', fontWeight: 500 }}>{n}</td>
                   <td className="w-mono" style={{ padding: '8px 10px', textAlign: 'right' }}>{f}</td>
                   <td className="w-mono" style={{ padding: '8px 10px', textAlign: 'right' }}>{p}</td>
@@ -240,11 +240,11 @@ function WireDataArch() {
           <span style={{ width: 14, height: 8, background: '#fdf3f3', border: `1px solid ${W.down}` }} /> 관리자
         </div>
         <div className="w-row" style={{ gap: 6 }}>
-          <svg width="22" height="6"><line x1="0" y1="3" x2="22" y2="3" stroke={W.muted} strokeWidth="1.2" strokeDasharray="4,3" /></svg>
+          <svg aria-hidden="true" width="22" height="6"><line x1="0" y1="3" x2="22" y2="3" stroke={W.muted} strokeWidth="1.2" strokeDasharray="4,3" /></svg>
           외부 호출
         </div>
         <div className="w-row" style={{ gap: 6 }}>
-          <svg width="22" height="6"><line x1="0" y1="3" x2="22" y2="3" stroke={W.muted} strokeWidth="1.2" /></svg>
+          <svg aria-hidden="true" width="22" height="6"><line x1="0" y1="3" x2="22" y2="3" stroke={W.muted} strokeWidth="1.2" /></svg>
           DB I/O
         </div>
       </div>

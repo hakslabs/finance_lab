@@ -141,7 +141,8 @@ the audit when all dimensions meet their threshold.
 
 ### Gate Thresholds (Aligned with Reports Pipeline Spec)
 
-- At least 20 documents must be reviewed before M4 begins.
+- At least 20 documents must be reviewed before the production report pipeline
+  begins.
 - At least 80% of reviewed documents must pass the table extraction quality
   dimension (>= 80% cell-level accuracy). This aligns with the reports
   pipeline spec requirement: "20-PDF audit shows >= 80% accurate table

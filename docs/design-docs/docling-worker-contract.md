@@ -129,7 +129,8 @@ the M4 report slice after the 20-document audit proves the shape.
 
 ## Audit Set
 
-Before M4 begins, collect a 20-document audit set with owner approval:
+Before the production report pipeline begins, collect a 20-document audit set
+with owner approval:
 
 - Korean brokerage/IR PDFs with dense Korean text.
 - US research PDFs with multi-column layouts.

@@ -31,24 +31,24 @@ sentiment data, satisfying the spec in
 - [ ] Implement `app/api/cron/quotes-us/route.ts` — Finnhub fetch every 15
       minutes during sessions. Bearer-protected. Updates `quotes` and
       `api_quota`.
-- [ ] Implement `app/api/cron/quotes-kr/route.ts` — KRX fetch once at
+- [x] Implement `app/api/cron/quotes-kr/route.ts` — KRX fetch once at
       18:30 KST. Updates `quotes_daily`.
-- [ ] Implement `app/api/cron/indices/route.ts` — KOSPI / KOSDAQ / S&P 500
+- [x] Implement `app/api/cron/indices/route.ts` — KOSPI / KOSDAQ / S&P 500
       / Nasdaq / Dow / KOSPI 200, every 15 minutes.
 - [ ] Implement `app/api/cron/sentiment/route.ts` — VIX, F&G, V-KOSPI, etc.
       every 15 minutes.
 - [ ] Add `vercel.json` cron schedules for the four jobs.
-- [ ] Build the home page (`app/(auth)/page.tsx`) with the 9 widgets per
+- [x] Build the home page (`app/(auth)/page.tsx`) with the 9 widgets per
       spec. Server-rendered shell + targeted client islands (sentiment
       gauge, theme toggle).
-- [ ] Build the global header (logo + nav + theme toggle + alerts bell +
+- [x] Build the global header (logo + nav + theme toggle + alerts bell +
       `⌘K` palette stub).
 - [ ] Wire `★` watchlist add / remove on the quick-view widget.
 - [x] Add `/api/search` endpoint (stocks first; masters / terms / reports
       land in later milestones).
-- [ ] Implement empty / error states from `STOCKLAB-Project-Plan.md`
+- [x] Implement empty / error states from `STOCKLAB-Project-Plan.md`
       §States for every widget on the home page.
-- [ ] Add Vitest unit tests for cron handlers (mock the upstream API).
+- [x] Add Vitest unit tests for cron handlers (mock the upstream API).
 - [ ] Add a Playwright smoke: login → home → click first index card →
       stock detail loads (stubbed if M2 is not yet ready).
 - [ ] Add Lighthouse CI for `/`. Target: Performance ≥ 90, Accessibility
@@ -93,3 +93,42 @@ sentiment data, satisfying the spec in
 - 2026-05-07 slice: provider-neutral `quotes-us` route harness and route-level
   tests exist for auth ordering, logged ingestion success, and logged failure.
   Live Finnhub provider wiring and cron schedule remain pending.
+- 2026-05-07 slice: live Finnhub `quotes-us` route/provider wiring is complete
+  for the repository-local path. The route now uses header-auth Finnhub
+  `/quote`, atomic `api_quota` claims with the documented free daily limit,
+  minute-based provider throttling, and normalized `quotes` upserts. Focused
+  mocked tests pass. The task remains unchecked because production 15-minute
+  scheduling is still unresolved under the current free-tier Vercel Cron
+  constraints; hosted secret placement and live preview cron observation also
+  remain deployment-owner work.
+- 2026-05-07 slice: TypeScript database types now include the existing M1 cache
+  tables `quotes_daily`, `indices`, and `sentiment`, unblocking type-safe cron
+  ingestion work. `quotes-kr` implementation still needs an owner/legal decision
+  before live KRX OpenAPI coding because KRX direct API access requires key and
+  per-endpoint approval, attribution, and redistribution/commercial-use review.
+- 2026-05-07 slice: owner approved direct KRX OpenAPI use for personal use and
+  confirmed local keys are configured. `quotes-kr` route/provider wiring is
+  complete for the repository-local path: bearer-protected cron route, KRX
+  header-auth provider for KOSPI/KOSDAQ daily bulk endpoints, atomic quota claim,
+  and `quotes_daily` upsert on `(symbol,date)`. Focused mocked tests pass. The
+  separate Vercel schedule task and live preview observation remain pending.
+- 2026-05-07 slice: `indices` route/provider wiring is complete for the
+  repository-local path. The route uses bearer-protected cron execution, a mixed
+  Finnhub/KOSCOM provider for S&P 500, Nasdaq, Dow, KOSPI, KOSDAQ, and KOSPI
+  200, atomic quota claim, spark accumulation, and `indices` upsert on `code`.
+  Focused mocked tests pass. The separate Vercel schedule task and live preview
+  observation remain pending.
+- 2026-05-07 slice: `sentiment` route/provider wiring is partially complete for
+  the repository-local path with a bearer-protected cron route, atomic quota
+  claim, Finnhub header-auth VIX fetch, and `sentiment` upsert on `code`.
+  Remaining gauges (F&G, V-KOSPI, Put/Call, AAII, NAAIM, High-Low, credit
+  balance, foreigner 5d) stay blocked on licensed/API source decisions; no
+  scraping fallback was added.
+- 2026-05-07 slice: M1 home dashboard shell is complete for the repository-local
+  path at `/`: temporary-auth protected server render, global header, greeting
+  hero, index strip, US/KR stock strips, VIX-aware sentiment card, watchlist
+  empty state, top-news cache read, mini market map, return-vs-market empty
+  state, and weekly calendar preview. `quotes_daily` now backs KR major stocks.
+  Focused dashboard tests and M1 cron regression tests pass; `next build` and
+  post-build `typecheck` pass. Watchlist mutation wiring remains blocked until
+  real Supabase auth user IDs replace the temporary M0 session.

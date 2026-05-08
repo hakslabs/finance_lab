@@ -14,7 +14,7 @@
 
 | 영역 | 선택 |
 | --- | --- |
-| 프론트 | Next.js 14 App Router · React 18 · Server Components 우선 |
+| 프론트 | Next.js 15 App Router · React 18 · Server Components 우선 |
 | 스타일 | CSS 변수 + Pretendard + JetBrains Mono · `data-theme` 단일 토글 |
 | 차트 | 자체 SVG 엔진 (그리기 도구 11종 + 지표 40종+) |
 | DB · Auth | Supabase Postgres + Auth (Email · Google · Apple · Kakao) |
@@ -24,7 +24,11 @@
 
 ## Current State
 
-현재 레포는 M0 인프라 스캐폴드와 FinanceDatabase 종목 seed가 들어간 Next.js 14 App Router 앱이다. 인증, 홈, cron 헬스 체크는 최소 동작 검증용으로 구현되어 있고, 실제 제품 화면은 이후 실행 계획에서 확장한다.
+현재 레포는 M0~M5 로컬 실행 슬라이스가 들어간 Next.js 15 App Router 앱이다.
+임시 M0 인증으로 홈, 종목 상세, 분석, 스크리너, 거장, 리포트,
+포트폴리오, 거래 입력 게이트 화면을 확인할 수 있다. OAuth-backed
+사용자 쓰기, 13F/리포트 운영 증거, 거래 mutation은 이후 실행 계획의
+프로덕션 게이트로 남아 있다.
 
 디자인 기준 자료는 이미 HTML / JSX export로 존재하며 `docs/design-exports/` 아래에 모아 둔다.
 
@@ -86,7 +90,8 @@ pnpm start
 2. 홈에서 시장 개요 + 관심종목 + 내 수익률 확인.
 3. 종목 검색(`⌘K` / `Ctrl+K`) 또는 스크리너로 종목 발굴.
 4. 종목 상세 8탭에서 차트 · 재무 · 적정가치 · 공시 · 뉴스 · 수급 · 목표주가 분석.
-5. `/me/transactions` 에서 거래 직접 입력 → `holdings` 자동 갱신.
+5. `/portfolio` 에서 보유/거래/성과 읽기 화면 확인. 실제 거래 입력은
+   OAuth-backed Supabase 세션 이후 활성화한다.
 6. `/reports` 에서 AI 요약된 학술 · 매크로 리포트 소비.
 
 ### 관리자
@@ -101,16 +106,16 @@ pnpm start
 ├── AGENTS.md                         에이전트 진입 문서 (영문)
 ├── ARCHITECTURE.md                   레포 최상위 구조 문서 (영문)
 ├── CLAUDE.md                         Claude Code 전용 운영 메모 (영문)
-├── app/                              Next.js 14 App Router 스캐폴드
+├── app/                              Next.js 15 App Router 앱
 │   ├── README.md                     app 폴더 구조 계약
-│   ├── (public)/                     로그인 · 공개 페이지 예정
-│   ├── (auth)/                       인증 사용자 페이지 예정
+│   ├── (public)/                     로그인 · 공개 페이지
+│   ├── (auth)/                       홈 · 종목 · 분석 · 스크리너 · M4/M5 화면
 │   ├── admin/                        /admin 라우트 예정
-│   ├── api/                          Route Handlers 예정
-│   └── _lib/                         shared app modules 예정
+│   ├── api/                          검색 · cron Route Handlers
+│   └── _lib/                         shared app modules
 ├── docs/
 │   ├── CODE_STRUCTURE.md             구현 전 app 폴더 구조 계약
-│   ├── FRONTEND.md                   Next.js 14 RSC 전략 + 컴포넌트 구조
+│   ├── FRONTEND.md                   Next.js App Router RSC 전략 + 컴포넌트 구조
 │   ├── SECURITY.md                   Supabase Auth + RLS + 시크릿 관리
 │   ├── RELIABILITY.md                무료 티어 한도 + cron + 다운그레이드 정책
 │   ├── DESIGN.md                     설계 결정 로그

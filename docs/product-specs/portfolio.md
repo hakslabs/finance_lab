@@ -48,6 +48,24 @@ Tabs (in order):
 - Portfolio data is RLS-protected. There is no public sharing surface.
 - Logs reference `user_id` only.
 
+## Local Adaptation — EP-0006
+
+- This local slice implements read-only portfolio helpers and route UI for
+  `/portfolio` and `/me/transactions` over `holdings`, `transactions`, `quotes`,
+  `indices`, and `securities_master`.
+- Under temporary M0 auth, helpers return an honest auth-required/empty state
+  when RLS exposes no user rows. They do not use fake user IDs or service-key
+  bypasses.
+- Transaction writes and the add-transaction Playwright flow remain gated until
+  OAuth-backed Supabase sessions and the route/mutation surfaces are available.
+- App code must continue to write transactions only; `holdings` remains derived
+  by database trigger recomputation.
+- CSV import is standardized as a canonical `transactions` CSV with columns
+  `ts`, `type`, `symbol`, `qty`, `px`, `fee`, and `currency`. Broker-specific
+  exports (Kiwoom, Mirae, Toss, IBKR) must map into that canonical shape before
+  insert; unsupported columns are ignored and invalid rows are rejected before
+  any database write.
+
 ## Done When
 
 - A user with at least 5 transactions sees correct holdings, sector, and

@@ -160,28 +160,53 @@ describe("quotes-us cron route", () => {
     expect(supabase.quoteUpsert).not.toHaveBeenCalled();
   });
 
-  it("fails closed after auth and logging when no provider is configured", async () => {
+  it("uses the Finnhub provider and documented daily quota by default when no provider is injected", async () => {
+    process.env.SUPABASE_URL = "https://example.supabase.co";
+    process.env.SUPABASE_PUBLISHABLE_KEY = "publishable-key-with-length";
+    process.env.SUPABASE_SECRET_KEY = "secret-key-with-length";
+    process.env.CRON_SECRET = "cron-secret-with-length";
+    process.env.KRX_API_KEY = "krx-key-with-length";
+    process.env.FINNHUB_API_KEY = "finnhub-key-with-length";
+
     const { createQuotesUsCronRoute } = await import("@/app/_lib/cron/quotes-us-route");
+    const { resetServerEnvCacheForTests } = await import("@/app/_lib/env/server");
+    resetServerEnvCacheForTests();
+
+    const fetch = vi.fn().mockResolvedValue(Response.json({ c: 195.5, dp: 1.2, t: 1778164200 }));
+    vi.stubGlobal("fetch", fetch);
+
     const supabase = createRouteClient();
     const prepareTargets = vi.fn().mockResolvedValue({ us: { market: "us", targets: [appleTarget], count: 1 } });
     const GET = createQuotesUsCronRoute({
       isAuthorizedRequest: () => true,
       createAdminClient: () => supabase.client,
       prepareTargets,
-      day: () => "2026-05-07",
-      dailyLimit: 10
+      day: () => "2026-05-07"
     });
 
     const response = await GET(new Request("http://localhost/api/cron/quotes-us"));
     const body = await response.json();
 
-    expect(response.status).toBe(500);
-    expect(body).toEqual({ ok: false, job: "quotes-us", logId: "log-quote-us", error: "US quote provider is not configured" });
-    expect(prepareTargets).not.toHaveBeenCalled();
-    expect(supabase.rpc).not.toHaveBeenCalled();
-    expect(supabase.quoteUpsert).not.toHaveBeenCalled();
-    expect(supabase.cronUpdate).toHaveBeenCalledWith(
-      expect.objectContaining({ status: "failed", err: "US quote provider is not configured", finished_at: expect.any(String) })
+    expect(response.status).toBe(200);
+    expect(body).toMatchObject({ ok: true, job: "quotes-us", logId: "log-quote-us" });
+    expect(body.result).toMatchObject({ ok: true, provider: "finnhub-us-quotes", requestedCount: 1, upsertedCount: 1 });
+    expect(supabase.rpc).toHaveBeenCalledWith("claim_api_quota", {
+      p_provider: "finnhub-us-quotes",
+      p_day: "2026-05-07",
+      p_amount: 1,
+      p_limit: 86400
+    });
+    expect(fetch).toHaveBeenCalledOnce();
+    const [url, init] = fetch.mock.calls[0];
+    expect(url).toBeInstanceOf(URL);
+    expect((url as URL).toString()).toBe("https://finnhub.io/api/v1/quote?symbol=AAPL");
+    expect((url as URL).searchParams.has("token")).toBe(false);
+    expect(init).toEqual({ headers: { "X-Finnhub-Token": "finnhub-key-with-length" } });
+    expect(supabase.quoteUpsert).toHaveBeenCalledWith(
+      [{ symbol: "AAPL", px: 195.5, pct: 1.2, ts: "2026-05-07T14:30:00.000Z" }],
+      { onConflict: "symbol" }
     );
+
+    vi.unstubAllGlobals();
   });
 });

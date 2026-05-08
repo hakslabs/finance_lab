@@ -19,7 +19,7 @@ describe("search route validation", () => {
 });
 
 describe("search route handler", () => {
-  it("returns search results from the securities helper", async () => {
+  it("returns securities results with masters and reports sidecars", async () => {
     const searchSecurities = vi.fn().mockResolvedValue([
       {
         symbol: "005930.KS",
@@ -34,17 +34,46 @@ describe("search route handler", () => {
         matchType: "alias"
       }
     ]);
+    const searchMasters = vi.fn().mockResolvedValue([
+      {
+        id: "buffett",
+        name: "Warren Buffett",
+        firm: "Berkshire Hathaway",
+        style: "Value",
+        href: "/masters/buffett",
+        matchType: "firm"
+      }
+    ]);
+    const searchReports = vi.fn().mockResolvedValue([
+      {
+        id: "r1",
+        title: "Apple Supply Chain",
+        src: "IB",
+        category: "single-stock",
+        tickers: ["AAPL"],
+        tags: ["hardware"],
+        publishedAt: "2026-05-07T00:00:00Z",
+        href: "/reports/r1",
+        matchType: "title"
+      }
+    ]);
 
     vi.resetModules();
     vi.doMock("@/app/_lib/data/securities", () => ({ searchSecurities }));
+    vi.doMock("@/app/_lib/masters/masters-data", () => ({ searchMasters }));
+    vi.doMock("@/app/_lib/reports/reports-data", () => ({ searchReports }));
 
     const { GET } = await import("@/app/api/search/route");
     const response = await GET(new Request("http://localhost/api/search?q=005930&limit=100"));
 
     expect(response.status).toBe(200);
     await expect(response.json()).resolves.toEqual({
-      results: [expect.objectContaining({ symbol: "005930.KS", matchType: "alias" })]
+      results: [expect.objectContaining({ symbol: "005930.KS", matchType: "alias" })],
+      masters: [expect.objectContaining({ id: "buffett", matchType: "firm" })],
+      reports: [expect.objectContaining({ id: "r1", matchType: "title" })]
     });
     expect(searchSecurities).toHaveBeenCalledWith("005930", 100);
+    expect(searchMasters).toHaveBeenCalledWith("005930", 100);
+    expect(searchReports).toHaveBeenCalledWith("005930", 100);
   });
 });

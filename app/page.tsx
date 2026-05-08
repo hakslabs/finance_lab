@@ -1,286 +1,138 @@
 import { redirect } from "next/navigation";
 
+import { MobileBottomTabBar } from "@/app/_components/mobile/bottom-tab-bar";
 import { clearTemporaryAuthCookie, readTemporaryAuthCookie } from "@/app/_lib/auth/cookies";
+
+import {
+  fetchDashboardData,
+  GlobalHeader,
+  GreetingHero,
+  IndexStrip,
+  MajorStocks,
+  MarketSentiment,
+  MiniMarketMap,
+  ReturnVsMarket,
+  TopNews,
+  WatchlistQuickView,
+  WeeklyCalendar,
+} from "@/app/_lib/home";
+
+export const metadata = {
+  title: "STOCKLAB — Dashboard",
+  description:
+    "Your personalized market dashboard. Track indices, stocks, sentiment, news, and more.",
+};
 
 export default async function HomePage() {
   const session = await readTemporaryAuthCookie();
 
+  // Fetch all dashboard data in parallel; widgets handle empty states gracefully
+  const data = await fetchDashboardData();
+
   async function endTemporarySession() {
     "use server";
 
-    clearTemporaryAuthCookie();
+    await clearTemporaryAuthCookie();
     redirect("/login");
   }
 
   return (
-    <div style={{ minHeight: "100vh", padding: "var(--sl-space-6) var(--sl-space-5)" }}>
-      <main style={{ maxWidth: 640, margin: "0 auto" }}>
-        {/* Header bar */}
-        <header
-          className="sl-card"
+    <div style={{ minHeight: "100vh", background: "var(--sl-bg)" }}>
+      {/* Global header */}
+      <GlobalHeader userName={session?.role ?? undefined} />
+
+      {/* Main content */}
+      <main
+        className="sl-mobile-pb-tabbar"
+        style={{
+          maxWidth: 1280,
+          margin: "0 auto",
+          padding: "var(--sl-space-5) var(--sl-space-6)",
+          display: "flex",
+          flexDirection: "column",
+          gap: "var(--sl-space-5)",
+        }}
+      >
+        {/* Row 1: Greeting hero + Logout */}
+        <div
           style={{
-            padding: "var(--sl-space-5) var(--sl-space-6)",
-            marginBottom: "var(--sl-space-5)",
             display: "flex",
-            alignItems: "center",
-            gap: "var(--sl-space-3)"
+            flexDirection: "column",
+            gap: "var(--sl-space-4)",
           }}
         >
-          <span
-            className="sl-mono"
-            style={{
-              width: 32,
-              height: 32,
-              borderRadius: "var(--sl-radius-sm)",
-              background: "linear-gradient(135deg, var(--sl-brand), var(--sl-cat3))",
-              color: "#fff",
-              fontSize: 15,
-              fontWeight: 700,
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexShrink: 0
-            }}
-          >
-            S
-          </span>
-          <div className="sl-grow">
-            <span
-              style={{
-                fontSize: 16,
-                fontWeight: 800,
-                letterSpacing: "-0.02em"
-              }}
-            >
-              STOCKLAB
-            </span>
-          </div>
-          <span className="sl-tag sl-tag-brand">M0</span>
-          <form action={endTemporarySession}>
-            <button type="submit" className="sl-btn sl-btn-secondary">
+          <GreetingHero
+            userName={session?.role === "admin" ? "Admin" : session?.role ?? undefined}
+            lastUpdated={data.lastUpdated}
+          />
+
+          <form action={endTemporarySession} style={{ alignSelf: "flex-start" }}>
+            <button type="submit" className="sl-btn sl-btn-secondary" style={{ fontSize: 12 }}>
               임시 세션 종료
             </button>
           </form>
-        </header>
+        </div>
 
-        {/* Status card */}
-        <section
-          className="sl-card"
+        {/* Row 2: Index strip (full width) */}
+        <IndexStrip indices={data.indices} />
+
+        {/* Row 3: US major stocks + KR major stocks (2-column) */}
+        <div
           style={{
-            padding: "var(--sl-space-7)",
-            marginBottom: "var(--sl-space-5)"
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))",
+            gap: "var(--sl-space-5)",
           }}
         >
-          <div className="sl-stack" style={{ gap: "var(--sl-space-4)" }}>
-            <div className="sl-row" style={{ gap: "var(--sl-space-3)" }}>
-              <div
-                style={{
-                  width: 44,
-                  height: 44,
-                  borderRadius: "50%",
-                  background: "var(--sl-up-soft)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexShrink: 0
-                }}
-              >
-                <svg
-                  width="22"
-                  height="22"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="var(--sl-up)"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <title>Active</title>
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-              </div>
-              <div className="sl-grow">
-                <h1 className="sl-h2">Infrastructure foundation is active.</h1>
-                <p className="sl-body-sm" style={{ marginTop: "var(--sl-space-1)" }}>
-                  보호된 라우트가 정상 작동하고 있습니다.
-                </p>
-              </div>
-            </div>
+          <MajorStocks stocks={data.usStocks} label="US Major Stocks" region="us" />
+          <MajorStocks stocks={data.krStocks} label="KR Major Stocks" region="kr" />
+        </div>
 
-            <div className="sl-rule" />
-
-            {/* Session info grid */}
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
-                gap: "var(--sl-space-4)"
-              }}
-            >
-              <div className="sl-card-soft" style={{ padding: "var(--sl-space-4)" }}>
-                <div className="sl-label">Session Role</div>
-                <div
-                  className="sl-mono"
-                  style={{
-                    fontSize: 15,
-                    fontWeight: 600,
-                    marginTop: "var(--sl-space-1)",
-                    color: "var(--sl-ink)"
-                  }}
-                >
-                  {session?.role ?? "none"}
-                </div>
-              </div>
-              <div className="sl-card-soft" style={{ padding: "var(--sl-space-4)" }}>
-                <div className="sl-label">Auth Method</div>
-                <div
-                  style={{
-                    fontSize: 15,
-                    fontWeight: 600,
-                    marginTop: "var(--sl-space-1)",
-                    color: "var(--sl-ink)"
-                  }}
-                >
-                  temporary
-                </div>
-              </div>
-              <div className="sl-card-soft" style={{ padding: "var(--sl-space-4)" }}>
-                <div className="sl-label">Milestone</div>
-                <div
-                  style={{
-                    fontSize: 15,
-                    fontWeight: 600,
-                    marginTop: "var(--sl-space-1)",
-                    color: "var(--sl-ink)"
-                  }}
-                >
-                  M0
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* M0 Status / disclaimer panel */}
-        <section
-          className="sl-card"
+        {/* Row 4: Market sentiment + Watchlist quick view (2-column) */}
+        <div
           style={{
-            padding: "var(--sl-space-6)",
-            marginBottom: "var(--sl-space-5)",
-            borderColor: "var(--sl-line-strong)",
-            borderWidth: 1,
-            borderStyle: "solid"
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))",
+            gap: "var(--sl-space-5)",
           }}
         >
-          <div className="sl-stack" style={{ gap: "var(--sl-space-4)" }}>
-            <div className="sl-row" style={{ gap: "var(--sl-space-2)" }}>
-              <span className="sl-tag sl-tag-warn">Status</span>
-              <span className="sl-label" style={{ textTransform: "none", letterSpacing: 0 }}>
-                Infra Verification Surface
-              </span>
-            </div>
+          <MarketSentiment readings={data.sentiment} />
+          <WatchlistQuickView items={[]} />
+        </div>
 
-            <div className="sl-stack" style={{ gap: "var(--sl-space-3)" }}>
-              {/* Check items */}
-              {[
-                {
-                  label: "Protected route middleware",
-                  desc: "인증 없이 / 에 접근 시 /login 으로 리다이렉트",
-                  ok: true
-                },
-                {
-                  label: "Temporary session cookie",
-                  desc: "서버 액션으로 임시 토큰 발급 및 검증",
-                  ok: true
-                },
-                {
-                  label: "OAuth providers (Google, Apple, Kakao, Email)",
-                  desc: "Supabase Auth 연동 시 활성화 예정",
-                  ok: false
-                },
-                {
-                  label: "Home dashboard widgets",
-                  desc: "M1 이후 구현 예정",
-                  ok: false
-                },
-                {
-                  label: "Stock data & portfolio surfaces",
-                  desc: "M2+ 범위",
-                  ok: false
-                }
-              ].map((item) => (
-                <div
-                  key={item.label}
-                  className="sl-row"
-                  style={{
-                    gap: "var(--sl-space-3)",
-                    padding: "var(--sl-space-3) 0",
-                    borderBottom:
-                      item.label !== "Stock data & portfolio surfaces"
-                        ? "1px solid var(--sl-hairline)"
-                        : "none",
-                    alignItems: "flex-start"
-                  }}
-                >
-                  <span
-                    style={{
-                      width: 20,
-                      height: 20,
-                      borderRadius: "var(--sl-radius-sm)",
-                      border: item.ok ? "none" : "1.5px solid var(--sl-faint)",
-                      background: item.ok ? "var(--sl-up)" : "transparent",
-                      color: item.ok ? "#fff" : "transparent",
-                      fontSize: 11,
-                      display: "inline-flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      flexShrink: 0,
-                      marginTop: 1
-                    }}
-                  >
-                    {item.ok && (
-                    <svg
-                      width="12"
-                      height="12"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="3.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      aria-hidden="true"
-                    >
-                      <title>Check</title>
-                      <polyline points="20 6 9 17 4 12" />
-                    </svg>
-                    )}
-                  </span>
-                  <div className="sl-grow">
-                    <div style={{ fontSize: 13, fontWeight: 600 }}>{item.label}</div>
-                    <div className="sl-caption" style={{ marginTop: 2, fontSize: 12 }}>
-                      {item.desc}
-                    </div>
-                  </div>
-                  <span
-                    className={`sl-tag ${item.ok ? "sl-tag-info" : ""}`}
-                    style={{ flexShrink: 0, opacity: item.ok ? 1 : 0.7 }}
-                  >
-                    {item.ok ? "active" : "deferred"}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        {/* Row 5: Top news + Mini market map (2-column) */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))",
+            gap: "var(--sl-space-5)",
+          }}
+        >
+          <TopNews items={data.news} />
+          <MiniMarketMap />
+        </div>
+
+        {/* Row 6: My return vs market (full width) */}
+        <ReturnVsMarket />
+
+        {/* Row 7: Weekly calendar (full width) */}
+        <WeeklyCalendar events={data.calendar} />
 
         {/* Footer */}
-        <footer style={{ textAlign: "center", paddingTop: "var(--sl-space-4)" }}>
+        <footer
+          style={{
+            textAlign: "center",
+            paddingTop: "var(--sl-space-4)",
+            paddingBottom: "var(--sl-space-8)",
+          }}
+        >
           <span className="sl-caption">
-            STOCKLAB M0 &middot; Temporary auth loop + infrastructure foundation
+            STOCKLAB M1 &middot; Home Dashboard
           </span>
         </footer>
       </main>
+
+      <MobileBottomTabBar activeHref="/" />
     </div>
   );
 }

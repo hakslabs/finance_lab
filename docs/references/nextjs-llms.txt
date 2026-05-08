@@ -1,4 +1,4 @@
-Next.js 14 App Router quick reference for STOCKLAB agents.
+Next.js 15 App Router quick reference for STOCKLAB agents.
 
 Commands
 - pnpm create next-app@latest --app --ts            scaffold (already done)
@@ -10,6 +10,8 @@ Commands
 
 Conventions
 - App Router only. No Pages Router code under app/.
+- In Next.js 15, App Router `params`, `searchParams`, and `cookies()` are
+  async. Await them before reading properties.
 - Default to React Server Components. Use 'use client' only at leaf
   components that need interactivity, browser APIs, or chart canvas.
 - Co-locate route segments under app/<segment>/page.tsx with optional

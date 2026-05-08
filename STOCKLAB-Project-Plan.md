@@ -310,7 +310,7 @@ STOCKLAB (app.stocklab.io)
 [Supabase · Postgres (캐시 + 사용자 데이터)]
         │  Row-level Security
         ▼
-[Next.js 14 App Router · 사용자 화면]
+[Next.js 15 App Router · 사용자 화면]
         │  read/write
         ▼
 [관리자 화면 (/admin)]
@@ -383,7 +383,7 @@ Supabase Postgres. 모든 사용자 테이블에 RLS 적용.
 
 ## Internal API Surface
 
-Next.js 14 App Router 기준. 사용자 화면은 가능한 곳에서 Server Component 로 직접 Supabase 를 읽는다. 변경 / 외부 호출이 필요한 곳만 Route Handler 또는 Server Action.
+Next.js 15 App Router 기준. 사용자 화면은 가능한 곳에서 Server Component 로 직접 Supabase 를 읽는다. 변경 / 외부 호출이 필요한 곳만 Route Handler 또는 Server Action.
 
 | 메서드 + 경로 | 용도 |
 | --- | --- |
@@ -430,7 +430,7 @@ Vercel Cron + GitHub Actions Worker 조합. 모든 작업의 호출량 합계가
 
 | 영역 | 선택 | 사유 |
 | --- | --- | --- |
-| 프론트 | Next.js 14 App Router · React 18 | Server Component 로 캐시 활용 + Vercel 친화 |
+| 프론트 | Next.js 15 App Router · React 18 | Server Component 로 캐시 활용 + Vercel 친화 |
 | 스타일 | CSS 변수 + Pretendard + JetBrains Mono | 라이트/다크 토글 단일 속성 + 한국어 우선 + 숫자 mono |
 | UI 토큰 | 자체 토큰 (`docs/design-exports/design/tokens.jsx` 기반) | Robinhood + Toss 하이브리드 핀테크 룩 |
 | 차트 | 자체 SVG 엔진 (그리기 도구 포함) | TradingView 라이트는 워터마크 · Chart.js 는 그리기 도구 부족 |
@@ -452,7 +452,7 @@ Vercel Cron + GitHub Actions Worker 조합. 모든 작업의 호출량 합계가
 [GitHub repo: stocklab]
     │  push to main
     ├──► [Vercel Production · app.stocklab.io]
-    │       └─ Next.js 14 + Cron jobs (≤10s)
+    │       └─ Next.js 15 + Cron jobs (≤10s)
     │
     ├──► [GitHub Actions]
     │       ├─ Docling worker (07:00 KST 매일)

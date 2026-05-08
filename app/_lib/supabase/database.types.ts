@@ -9,6 +9,200 @@ export type Database = {
         Update: { symbol?: string; px?: number | null; pct?: number | null; ts?: string };
         Relationships: [];
       };
+      quotes_daily: {
+        Row: {
+          symbol: string;
+          date: string;
+          open: number | null;
+          high: number | null;
+          low: number | null;
+          close: number | null;
+          vol: number | null;
+        };
+        Insert: {
+          symbol: string;
+          date: string;
+          open?: number | null;
+          high?: number | null;
+          low?: number | null;
+          close?: number | null;
+          vol?: number | null;
+        };
+        Update: {
+          symbol?: string;
+          date?: string;
+          open?: number | null;
+          high?: number | null;
+          low?: number | null;
+          close?: number | null;
+          vol?: number | null;
+        };
+        Relationships: [];
+      };
+      indices: {
+        Row: {
+          code: string;
+          value: number | null;
+          change: number | null;
+          spark: number[];
+          updated_at: string;
+        };
+        Insert: {
+          code: string;
+          value?: number | null;
+          change?: number | null;
+          spark?: number[];
+          updated_at?: string;
+        };
+        Update: {
+          code?: string;
+          value?: number | null;
+          change?: number | null;
+          spark?: number[];
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      sentiment: {
+        Row: { code: string; value: number | null; band: string | null; ts: string };
+        Insert: { code: string; value?: number | null; band?: string | null; ts?: string };
+        Update: { code?: string; value?: number | null; band?: string | null; ts?: string };
+        Relationships: [];
+      };
+      financials: {
+        Row: {
+          symbol: string;
+          period: string;
+          is_json: Json;
+          bs_json: Json;
+          cf_json: Json;
+          ratios_json: Json;
+          updated_at: string;
+        };
+        Insert: {
+          symbol: string;
+          period: string;
+          is_json?: Json;
+          bs_json?: Json;
+          cf_json?: Json;
+          ratios_json?: Json;
+          updated_at?: string;
+        };
+        Update: {
+          symbol?: string;
+          period?: string;
+          is_json?: Json;
+          bs_json?: Json;
+          cf_json?: Json;
+          ratios_json?: Json;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      news: {
+        Row: {
+          id: string;
+          src: string;
+          title: string;
+          url: string;
+          summary: string | null;
+          tickers: string[];
+          sentiment: number | null;
+          published_at: string;
+        };
+        Insert: {
+          id?: string;
+          src: string;
+          title: string;
+          url: string;
+          summary?: string | null;
+          tickers?: string[];
+          sentiment?: number | null;
+          published_at: string;
+        };
+        Update: {
+          id?: string;
+          src?: string;
+          title?: string;
+          url?: string;
+          summary?: string | null;
+          tickers?: string[];
+          sentiment?: number | null;
+          published_at?: string;
+        };
+        Relationships: [];
+      };
+      master_profiles: {
+        Row: {
+          id: string;
+          name: string;
+          firm: string | null;
+          style: string | null;
+          philosophy_md: string | null;
+          books: Json;
+          videos: Json;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          firm?: string | null;
+          style?: string | null;
+          philosophy_md?: string | null;
+          books?: Json;
+          videos?: Json;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          name?: string;
+          firm?: string | null;
+          style?: string | null;
+          philosophy_md?: string | null;
+          books?: Json;
+          videos?: Json;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      master_holdings: {
+        Row: {
+          master_id: string;
+          symbol: string;
+          weight: number | null;
+          shares: number | null;
+          qoq_delta: number | null;
+          quarter: string;
+        };
+        Insert: {
+          master_id: string;
+          symbol: string;
+          weight?: number | null;
+          shares?: number | null;
+          qoq_delta?: number | null;
+          quarter: string;
+        };
+        Update: {
+          master_id?: string;
+          symbol?: string;
+          weight?: number | null;
+          shares?: number | null;
+          qoq_delta?: number | null;
+          quarter?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "master_holdings_master_id_fkey";
+            columns: ["master_id"];
+            isOneToOne: false;
+            referencedRelation: "master_profiles";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
       cron_logs: {
         Row: {
           id: string;
@@ -217,6 +411,66 @@ export type Database = {
           }
         ];
       };
+      watchlists: {
+        Row: { id: string; user_id: string; name: string; symbols: string[]; created_at: string };
+        Insert: { id?: string; user_id: string; name: string; symbols?: string[]; created_at?: string };
+        Update: { id?: string; user_id?: string; name?: string; symbols?: string[]; created_at?: string };
+        Relationships: [];
+      };
+      holdings: {
+        Row: { id: string; user_id: string; symbol: string; qty: number; avg_px: number | null; currency: string; updated_at: string };
+        Insert: { id?: string; user_id: string; symbol: string; qty?: number; avg_px?: number | null; currency: string; updated_at?: string };
+        Update: { id?: string; user_id?: string; symbol?: string; qty?: number; avg_px?: number | null; currency?: string; updated_at?: string };
+        Relationships: [];
+      };
+      transactions: {
+        Row: {
+          id: string;
+          user_id: string;
+          ts: string;
+          type: Database["public"]["Enums"]["transaction_type"];
+          symbol: string;
+          qty: number;
+          px: number;
+          fee: number;
+          currency: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          ts?: string;
+          type: Database["public"]["Enums"]["transaction_type"];
+          symbol: string;
+          qty?: number;
+          px?: number;
+          fee?: number;
+          currency: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          ts?: string;
+          type?: Database["public"]["Enums"]["transaction_type"];
+          symbol?: string;
+          qty?: number;
+          px?: number;
+          fee?: number;
+          currency?: string;
+        };
+        Relationships: [];
+      };
+      notes: {
+        Row: { id: string; user_id: string; symbol_or_ref: string; md: string; created_at: string };
+        Insert: { id?: string; user_id: string; symbol_or_ref: string; md: string; created_at?: string };
+        Update: { id?: string; user_id?: string; symbol_or_ref?: string; md?: string; created_at?: string };
+        Relationships: [];
+      };
+      saved_screens: {
+        Row: { id: string; user_id: string; name: string; filters_json: Json; created_at: string };
+        Insert: { id?: string; user_id: string; name: string; filters_json?: Json; created_at?: string };
+        Update: { id?: string; user_id?: string; name?: string; filters_json?: Json; created_at?: string };
+        Relationships: [];
+      };
       user_preferences: {
         Row: {
           user_id: string;
@@ -244,6 +498,187 @@ export type Database = {
         };
         Relationships: [];
       };
+      articles: {
+        Row: {
+          id: string;
+          category: string;
+          title: string;
+          md: string;
+          published_at: string | null;
+          status: Database["public"]["Enums"]["article_status"];
+        };
+        Insert: {
+          id?: string;
+          category: string;
+          title: string;
+          md: string;
+          published_at?: string | null;
+          status?: Database["public"]["Enums"]["article_status"];
+        };
+        Update: {
+          id?: string;
+          category?: string;
+          title?: string;
+          md?: string;
+          published_at?: string | null;
+          status?: Database["public"]["Enums"]["article_status"];
+        };
+        Relationships: [];
+      };
+      terms: {
+        Row: {
+          id: string;
+          term: string;
+          definition: string;
+          related_tickers: string[];
+          category: string;
+        };
+        Insert: {
+          id?: string;
+          term: string;
+          definition: string;
+          related_tickers?: string[];
+          category: string;
+        };
+        Update: {
+          id?: string;
+          term?: string;
+          definition?: string;
+          related_tickers?: string[];
+          category?: string;
+        };
+        Relationships: [];
+      };
+      bookmarks: {
+        Row: {
+          id: string;
+          user_id: string;
+          type: Database["public"]["Enums"]["bookmark_type"];
+          ref_id: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          type: Database["public"]["Enums"]["bookmark_type"];
+          ref_id: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          type?: Database["public"]["Enums"]["bookmark_type"];
+          ref_id?: string;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      follows: {
+        Row: {
+          user_id: string;
+          master_id: string;
+          created_at: string;
+        };
+        Insert: {
+          user_id: string;
+          master_id: string;
+          created_at?: string;
+        };
+        Update: {
+          user_id?: string;
+          master_id?: string;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "follows_master_id_fkey";
+            columns: ["master_id"];
+            isOneToOne: false;
+            referencedRelation: "master_profiles";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+      alerts: {
+        Row: {
+          id: string;
+          user_id: string;
+          rule_json: Json;
+          channel: Database["public"]["Enums"]["alert_channel"];
+          enabled: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          rule_json?: Json;
+          channel?: Database["public"]["Enums"]["alert_channel"];
+          enabled?: boolean;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          rule_json?: Json;
+          channel?: Database["public"]["Enums"]["alert_channel"];
+          enabled?: boolean;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      alerts_queue: {
+        Row: {
+          id: string;
+          user_id: string;
+          rule: Json;
+          status: Database["public"]["Enums"]["cron_status"];
+          evaluated_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          rule?: Json;
+          status?: Database["public"]["Enums"]["cron_status"];
+          evaluated_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          rule?: Json;
+          status?: Database["public"]["Enums"]["cron_status"];
+          evaluated_at?: string | null;
+        };
+        Relationships: [];
+      };
+      user_report_bookmarks: {
+        Row: {
+          user_id: string;
+          report_id: string;
+          note_md: string | null;
+          created_at: string;
+        };
+        Insert: {
+          user_id: string;
+          report_id: string;
+          note_md?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          user_id?: string;
+          report_id?: string;
+          note_md?: string | null;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "user_report_bookmarks_report_id_fkey";
+            columns: ["report_id"];
+            isOneToOne: false;
+            referencedRelation: "reports";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
     };
     Views: Record<string, never>;
     Functions: {
@@ -260,7 +695,13 @@ export type Database = {
         }[];
       };
     };
-    Enums: { cron_status: "running" | "ok" | "failed" };
+    Enums: {
+      article_status: "draft" | "published" | "archived";
+      alert_channel: "push" | "email";
+      bookmark_type: "term" | "article" | "report";
+      cron_status: "running" | "ok" | "failed";
+      transaction_type: "buy" | "sell" | "div" | "cash";
+    };
     CompositeTypes: Record<string, never>;
   };
 };

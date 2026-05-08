@@ -377,3 +377,34 @@ body {
   background: var(--sl-brand-soft);
   color: var(--sl-brand-ink);
 }
+
+/* ── Mobile responsive utilities (M8) ── */
+.sl-mobile-only {
+  display: none;
+}
+.sl-desktop-only {
+  display: initial;
+}
+
+@media (max-width: 640px) {
+  .sl-mobile-only {
+    display: flex;
+  }
+  .sl-desktop-only {
+    display: none !important;
+  }
+  .sl-mobile-stack {
+    flex-direction: column !important;
+  }
+  .sl-mobile-pb-tabbar {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0)) !important;
+  }
+  .sl-mobile-scroll-x {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  .sl-mobile-scroll-x > * {
+    scroll-snap-align: start;
+  }
+}

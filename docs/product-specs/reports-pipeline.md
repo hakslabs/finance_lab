@@ -48,6 +48,18 @@ Reader UI:
 - Tag auto-extraction errors do not block summary generation; tags can be
   edited in `/admin`.
 
+## Local Adaptation — EP-0005
+
+- This local slice implements read-only helpers and route UI for `/reports` and
+  `/reports/[id]` over `reports` and `reports_tables`, including sanitized
+  Markdown rendering through the shared DOMPurify boundary.
+- Bookmark and note actions are represented as auth-required/disabled until real
+  OAuth-backed Supabase sessions can satisfy RLS. No local helper writes
+  `user_report_bookmarks` or `notes`.
+- The 7-day ingestion target, 20-PDF table audit, Gemini quota evidence, and
+  average pipeline duration gate require staged/production worker runs and are
+  not claimed by local tests.
+
 ## Done When
 
 - For 7 consecutive days, at least 30 reports per day land in `reports`

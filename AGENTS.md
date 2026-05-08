@@ -18,7 +18,7 @@ It is a navigation map, not a manual. Read the linked docs for substance.
 
 ```text
 .
-├── app/                              Next.js 14 App Router scaffold
+├── app/                              Next.js 15 App Router app
 │   ├── (public)/                     /login, marketing
 │   ├── (auth)/                       /, /analysis, /screener, /masters,
 │   │                                 /learn, /portfolio, /reports,
@@ -71,6 +71,7 @@ The project is considered shippable when:
 - Track unresolved tradeoffs in `docs/exec-plans/tech-debt-tracker.md`.
 - Capture significant design decisions in `docs/DESIGN.md` decision log.
 - Generated schema dumps belong in `docs/generated/`; do not hand-edit them.
-- Keep `app/` inert until the relevant execution plan adds runtime files.
+- Add or change `app/` runtime files only through the execution plan that owns
+  that surface.
 - Keep installation and run instructions in `README.md` only — do not duplicate
   here.

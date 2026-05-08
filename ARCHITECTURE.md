@@ -9,7 +9,7 @@ hold across the codebase. Implementation details belong elsewhere.
 
 ## Bird's-Eye View
 
-STOCKLAB is a single Next.js 14 App Router application backed by Supabase
+STOCKLAB is a single Next.js 15 App Router application backed by Supabase
 Postgres. External market data is pulled by two complementary cron systems
 (Vercel Cron for short jobs, GitHub Actions for heavy PDF/AI pipelines) and
 written into Supabase. The browser reads the same Supabase database through
@@ -25,7 +25,7 @@ Server Components when possible, Route Handlers when not.
 [Supabase Postgres + Auth + RLS]
         |  read via anon key (RLS) or service key (admin/cron)
         v
-[Next.js 14 App Router]
+[Next.js 15 App Router]
         |  Server Components first; Route Handlers / Server Actions for writes
         v
 [Browser]
@@ -44,7 +44,7 @@ The system has three execution domains:
 
 | Layer | Technology | Where it lives |
 | --- | --- | --- |
-| Routing & rendering | Next.js 14 App Router | `app/` |
+| Routing & rendering | Next.js 15 App Router | `app/` |
 | Styling | CSS variables, Pretendard, JetBrains Mono | `app/globals.css`, `docs/design-exports/design/tokens.jsx` |
 | Charting | Custom SVG engine | `app/_charts/` (planned) |
 | Database | Supabase Postgres | `supabase/migrations/` (planned) |
@@ -56,11 +56,12 @@ The system has three execution domains:
 | Error tracking | Sentry | server + client SDKs |
 | Analytics | Vercel Analytics | first-party |
 
-## Implementation Scaffold
+## Implementation Runtime
 
-`app/` contains the M0 runtime scaffold: layout, global styles, temporary auth
-loop, and cron health route. Product route files are added only by the execution
-plan that owns that surface.
+`app/` contains the local M0-M5 runtime: layout, global styles, temporary auth
+loop, cron/search routes, and the home, stock detail, analysis, screener,
+masters, reports, portfolio, and transaction-gate surfaces. New product route
+files are added only by the execution plan that owns that surface.
 
 The detailed folder contract lives in `docs/CODE_STRUCTURE.md`.
 

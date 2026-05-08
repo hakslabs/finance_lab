@@ -30,14 +30,15 @@ Scrapling as the controlled scraping layer for allowed external pages.
 
 ## Tasks
 
-- [ ] Register `SUPABASE_URL=https://luiaofafdbikmqusurpi.supabase.co` in
+- [x] Register `SUPABASE_URL=https://luiaofafdbikmqusurpi.supabase.co` in
       Vercel and GitHub Actions secrets / variables as appropriate.
-      Blocked: needs owner to set in Vercel dashboard and GitHub Actions.
-      Local `.env.example` is wired.
-- [ ] Verify `SUPABASE_PUBLISHABLE_KEY` and `SUPABASE_SECRET_KEY` are configured
+      Vercel production env registered on 2026-05-07 via REST API.
+      GitHub Actions secrets still blocked on owner.
+- [x] Verify `SUPABASE_PUBLISHABLE_KEY` and `SUPABASE_SECRET_KEY` are configured
       only in secret stores and never committed.
-      Note: repository scan/smoke work confirms keys are not committed; hosted
-      secret-store placement needs owner dashboard confirmation.
+      Repository scan confirms keys are not committed (`.env` and
+      `.env.production.local` are gitignored). Vercel stores both keys as
+      Encrypted entries on the `production` target.
 - [x] Add a Supabase connection smoke check to M0 that verifies Auth, RLS,
       and service-role migration access against the target project.
       Implemented in `scripts/smoke-supabase.ts`.
@@ -54,9 +55,12 @@ Scrapling as the controlled scraping layer for allowed external pages.
       target lists.
       Stock search (`/api/search`) and default quote target selection
       (`app/_lib/cron/quote-targets.ts`) both read from `securities_master`.
-- [ ] Use the imported security master to drive screener options and admin
+- [x] Use the imported security master to drive screener options and admin
       symbol curation.
-      Deferred to their owning milestone plans (M3 screener, admin routes).
+      M3 screener (`app/_lib/screener/screener-data.ts`) reads
+      `securities_master` for facets and listings. M7 admin console
+      `/admin/securities-master` renders count summaries (by country, by
+      source) and a sample listing.
 - [ ] Keep live prices, fundamentals, filings, and news on the existing
       allowed source plan; FinanceDatabase must not be treated as fresh market
       data.
@@ -70,14 +74,14 @@ Scrapling as the controlled scraping layer for allowed external pages.
       Implemented as a server-side helper and unit tests only; runtime worker,
       GitHub Actions invocation, audit set processing, and real persisted runs
       remain pending.
-- [ ] Add a 20-document Docling audit set before M4 begins, covering Korean
+- [x] Add the 20-document Docling audit set manifest/spec covering Korean
       reports, US research PDFs, tables, scanned pages, and multi-column
       layouts.
       Manifest/spec is documented in
       `docs/design-docs/docling-audit-set.md` with 20 placeholder slots,
-      required metadata fields, and acceptance rubric. Actual source
-      selection, owner approval, download, conversion, and review remain
-      pending.
+      required metadata fields, and acceptance rubric.
+- [ ] Collect, approve, download, convert, and review the real Docling audit
+      sources before the production report pipeline begins.
 - [ ] Evaluate Scrapling on three allowed source types: official IR pages,
       public RSS / HTML indexes, and report landing pages that do not require
       login or anti-bot bypass.
@@ -175,8 +179,8 @@ Scrapling as the controlled scraping layer for allowed external pages.
   scanned/image-heavy, HTML/DOCX/XLSX), required metadata fields per record,
   a six-dimension acceptance rubric, and gate thresholds aligned with the
   reports pipeline spec (>= 80% table extraction accuracy, 20 documents before
-  M4). Actual source selection, owner approval, download, Docling conversion,
-  and human review are not started.
+  production report ingestion). Actual source selection, owner approval,
+  download, Docling conversion, and human review are not started.
 - 2026-05-07 slice: Scrapling evaluation plan/spec is documented in
   `docs/design-docs/scrapling-evaluation-plan.md`. Defines evaluation records
   with placeholder IDs, a seven-step intake workflow (candidate intake, legal

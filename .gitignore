@@ -19,3 +19,4 @@ supabase/.temp/
 *.log
 .design-canvas.state.json
 *-standalone.html
+.vercel

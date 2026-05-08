@@ -9,6 +9,8 @@ const validEnv: NodeJS.ProcessEnv = {
   SUPABASE_PUBLISHABLE_KEY: "publishable-key-with-length",
   SUPABASE_SECRET_KEY: "secret-key-with-length",
   CRON_SECRET: "cron-secret-with-length",
+  KRX_API_KEY: "krx-key-with-length",
+  FINNHUB_API_KEY: "finnhub-key-with-length",
   SENTRY_DSN: "",
   NEXT_PUBLIC_SENTRY_DSN: ""
 };
@@ -20,6 +22,8 @@ describe("environment validation", () => {
       SUPABASE_PUBLISHABLE_KEY: "publishable-key-with-length",
       SUPABASE_SECRET_KEY: "secret-key-with-length",
       CRON_SECRET: "cron-secret-with-length",
+      KRX_API_KEY: "krx-key-with-length",
+      FINNHUB_API_KEY: "finnhub-key-with-length",
       SENTRY_DSN: undefined,
       NEXT_PUBLIC_SENTRY_DSN: undefined
     });
@@ -39,6 +43,8 @@ describe("environment validation", () => {
 
     expect(Object.keys(parsed)).not.toContain("SUPABASE_SECRET_KEY");
     expect(Object.keys(parsed)).not.toContain("CRON_SECRET");
+    expect(Object.keys(parsed)).not.toContain("KRX_API_KEY");
+    expect(Object.keys(parsed)).not.toContain("FINNHUB_API_KEY");
     expect(Object.keys(parsed)).not.toContain("SENTRY_DSN");
   });
 });

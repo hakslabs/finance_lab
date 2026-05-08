@@ -10,6 +10,8 @@ describe("cron auth", () => {
     vi.stubEnv("SUPABASE_PUBLISHABLE_KEY", "publishable-key-with-length");
     vi.stubEnv("SUPABASE_SECRET_KEY", "secret-key-with-length");
     vi.stubEnv("CRON_SECRET", "cron-secret-with-length");
+    vi.stubEnv("KRX_API_KEY", "krx-api-key-with-length");
+    vi.stubEnv("FINNHUB_API_KEY", "finnhub-api-key-with-length");
 
     const { isAuthorizedCronRequest } = await import("@/app/_lib/auth/cron");
     const goodRequest = new Request("http://localhost/api/cron/__health", {

@@ -99,9 +99,11 @@ These files imply runtime behavior and belong to the relevant execution plan.
 
 The repository-structure phase is complete when:
 
-- `app/` exists as an inert scaffold only.
+- `app/` structure and runtime files match the active execution plans that own
+  each route surface.
 - `docs/CODE_STRUCTURE.md`, `ARCHITECTURE.md`, `docs/FRONTEND.md`, and
   `README.md` agree on route and shared-code boundaries.
 - Existing design HTML / JSX exports are referenced as source material.
 - No existing files are moved or deleted.
-- No runtime Next.js, Supabase, package, or test files are added prematurely.
+- No runtime Next.js, Supabase, package, or test files are added outside their
+  owning execution plan.
