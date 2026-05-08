@@ -36,6 +36,7 @@ can use end-to-end.
 | ID | Plan | Scope | Status | Link |
 | --- | --- | --- | --- | --- |
 | EP-0011 | Data Source Reduction | Supabase target connection, FinanceDatabase US / South Korea seed, Docling Markdown pipeline, Scrapling evaluation | Active | [EP-0011](./exec-plans/active/EP-0011-data-source-reduction.md) |
+| EP-0012 | Responsive UX + ISR Refactor | Move `cookies()` out of page files to unlock ISR; route adoption of the shared state library; design-export parity at 375 / 768 / 1024 / 1280 / 1920 | Active (backlog) | [EP-0012](./exec-plans/active/EP-0012-responsive-ux-isr-refactor.md) |
 
 ## Plan
 
