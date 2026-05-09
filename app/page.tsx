@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { MobileBottomTabBar } from "@/app/_components/mobile/bottom-tab-bar";
@@ -23,11 +24,34 @@ export const metadata = {
     "Your personalized market dashboard. Track indices, stocks, sentiment, news, and more.",
 };
 
-export default async function HomePage() {
+type Market = "all" | "us" | "kr";
+
+const KR_INDEX_CODES = new Set(["KOSPI", "KOSDAQ", "KOSPI200"]);
+const US_INDEX_CODES = new Set(["SP500", "NASDAQ", "DOW"]);
+
+function parseMarket(value: string | string[] | undefined): Market {
+  if (value === "us" || value === "kr") return value;
+  return "all";
+}
+
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const session = await readTemporaryAuthCookie();
+  const params = (await searchParams) ?? {};
+  const market = parseMarket(params.market);
 
   // Fetch all dashboard data in parallel; widgets handle empty states gracefully
   const data = await fetchDashboardData();
+
+  const filteredIndices =
+    market === "us"
+      ? data.indices.filter((i) => US_INDEX_CODES.has(i.code))
+      : market === "kr"
+        ? data.indices.filter((i) => KR_INDEX_CODES.has(i.code))
+        : data.indices;
 
   async function endTemporarySession() {
     "use server";
@@ -73,19 +97,29 @@ export default async function HomePage() {
           </form>
         </div>
 
-        {/* Row 2: Index strip (full width) */}
-        <IndexStrip indices={data.indices} />
+        {/* Market toggle */}
+        <MarketToggle active={market} />
 
-        {/* Row 3: US major stocks + KR major stocks (2-column) */}
+        {/* Row 2: Index strip (full width, filtered by market) */}
+        <IndexStrip indices={filteredIndices} />
+
+        {/* Row 3: Major stocks per market */}
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))",
+            gridTemplateColumns:
+              market === "all"
+                ? "repeat(auto-fit, minmax(340px, 1fr))"
+                : "1fr",
             gap: "var(--sl-space-5)",
           }}
         >
-          <MajorStocks stocks={data.usStocks} label="US Major Stocks" region="us" />
-          <MajorStocks stocks={data.krStocks} label="KR Major Stocks" region="kr" />
+          {market !== "kr" && (
+            <MajorStocks stocks={data.usStocks} label="🇺🇸 US Major Stocks" region="us" />
+          )}
+          {market !== "us" && (
+            <MajorStocks stocks={data.krStocks} label="🇰🇷 KR Major Stocks" region="kr" />
+          )}
         </div>
 
         {/* Row 4: Market sentiment + Watchlist quick view (2-column) */}
@@ -134,5 +168,53 @@ export default async function HomePage() {
 
       <MobileBottomTabBar activeHref="/" />
     </div>
+  );
+}
+
+function MarketToggle({ active }: { readonly active: Market }) {
+  const options: ReadonlyArray<{ readonly value: Market; readonly label: string; readonly href: string }> = [
+    { value: "all", label: "전체", href: "/" },
+    { value: "us", label: "🇺🇸 미국", href: "/?market=us" },
+    { value: "kr", label: "🇰🇷 한국", href: "/?market=kr" },
+  ];
+  return (
+    <nav
+      aria-label="시장 필터"
+      role="tablist"
+      style={{
+        display: "flex",
+        gap: "var(--sl-space-2)",
+        flexWrap: "wrap",
+      }}
+    >
+      {options.map((opt) => {
+        const isActive = active === opt.value;
+        return (
+          <Link
+            key={opt.value}
+            href={opt.href}
+            role="tab"
+            aria-selected={isActive}
+            data-active={isActive ? "true" : undefined}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              padding: "6px 14px",
+              borderRadius: "var(--sl-radius-pill)",
+              fontSize: 13,
+              fontWeight: isActive ? 600 : 500,
+              color: isActive ? "var(--sl-surface)" : "var(--sl-ink-sub)",
+              background: isActive ? "var(--sl-ink)" : "var(--sl-surface-alt)",
+              border: "1px solid",
+              borderColor: isActive ? "var(--sl-ink)" : "var(--sl-line)",
+              textDecoration: "none",
+              transition: "all var(--sl-motion-fast)",
+            }}
+          >
+            {opt.label}
+          </Link>
+        );
+      })}
+    </nav>
   );
 }
