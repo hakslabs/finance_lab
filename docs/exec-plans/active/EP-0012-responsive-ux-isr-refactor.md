@@ -81,3 +81,27 @@ the page-level data fetch.
 - ISR is intentionally **not** applied as cosmetic `export const
   revalidate` lines on dynamic-marked pages. Apply only after the auth
   boundary refactor moves `cookies()` out of page files.
+
+## Adjacent Backlog: KOSCOM → KRX index migration
+
+`app/_lib/providers/indices.ts` currently calls KOSCOM's K-MyData API
+(`https://oap.k-mydata.org/v3/market/realtime/index/...`) for KOSPI,
+KOSDAQ, and KOSPI200. KOSCOM is a separate service with its own key;
+the codebase reuses `KRX_API_KEY` against it, which always returns 401.
+
+Owner has filed five KRX OpenAPI index groups (KOSPI Series, KOSDAQ
+Series, KRX Series, ETF, Bond Index) — all currently `승인대기`
+(approval pending). Once approved, those `data-dbg.krx.co.kr/svc/apis/idx/*`
+endpoints answer with the standard KRX `OutBlock_1` envelope.
+
+Migrate `fetchKoscomIndex` → `fetchKrxIndex`:
+- Hit `idx/kospi_dd_trd`, `idx/kosdaq_dd_trd` (and `idx/krx_dd_trd` if
+  needed) with `AUTH_KEY` header.
+- Filter `OutBlock_1` by `IDX_NM`/`IDX_CLSS` to extract KOSPI / KOSDAQ /
+  KOSPI200 records.
+- Update `tests/indices-provider.test.ts` with the new fetch URLs and
+  response shape (`OutBlock_1[]` instead of `result.trdPrc`).
+- Drop the unused KOSCOM helpers and `koscomUpdatedAt` time logic.
+
+Defer the migration until at least one of the index groups is approved
+so the response schema can be inspected directly rather than guessed.

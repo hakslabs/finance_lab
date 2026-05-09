@@ -133,6 +133,23 @@ milestone closes, the EP moves to `docs/exec-plans/completed/`.
   one captured-error verification on the Sentry dashboard, OAuth Google
   (paused at the consent-screen step, deferred to the final auth pass),
   and 7-day cron observation (continues naturally).
+- 2026-05-09 — Production data + perf pass: `vercel.json` pinned to
+  `regions: ["icn1"]` (Seoul), confirmed with `x-vercel-id:
+  icn1::icn1::...` after redeploy. Two production Supabase migrations
+  (`m1_atomic_api_quota_claim`, `m0_holdings_recompute_placeholder`)
+  were missing on the hosted DB; pushed via dashboard SQL editor.
+  `claim_api_quota` had an OUT-param vs. unqualified-column ambiguity
+  in `strict search_path` mode — fixed in the migration file (alias
+  removal, `on conflict on constraint api_quota_pkey`, `RETURN QUERY
+  VALUES`) and re-applied. After the fix, `quotes-us` cron successfully
+  upserted 33 US tickers and `sentiment` cron claimed quota cleanly.
+  `quotes-kr` and `indices` still 401: KRX OpenAPI account is missing
+  the "주식 일별매매정보" group (owner action required), and the index
+  cron currently calls KOSCOM K-MyData with the KRX key, which is the
+  wrong service. KOSCOM → KRX index migration captured in EP-0012 as
+  an adjacent backlog (defer until owner's filed KRX index groups are
+  approved so the `OutBlock_1` response shape can be inspected
+  first-hand instead of guessed).
 
 ## Open Questions
 
