@@ -61,9 +61,20 @@ export function createMixedIndexProvider(options: MixedIndexProviderOptions): In
       }
 
       for (const index of koscomIndices) {
-        const row = await fetchKoscomIndex(fetcher, options.krxApiKey, index, context.day);
-        if (row) {
-          rows.push(row);
+        try {
+          const row = await fetchKoscomIndex(fetcher, options.krxApiKey, index, context.day);
+          if (row) {
+            rows.push(row);
+          }
+        } catch (error) {
+          // KOSCOM K-MyData uses a separate key from KRX OpenAPI. Until
+          // the KOSCOM → KRX index migration in EP-0012 lands, treat any
+          // failure here as a soft skip so the US indices still commit.
+          // eslint-disable-next-line no-console
+          console.warn(
+            `[indices] skipping KR index ${index.code}:`,
+            error instanceof Error ? error.message : error
+          );
         }
       }
 

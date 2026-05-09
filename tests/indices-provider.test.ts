@@ -83,15 +83,20 @@ describe("mixed index provider", () => {
     await expect(provider.fetchIndices({ day: "2026-05-07" })).rejects.not.toThrow("secret-finnhub-token");
   });
 
-  it("throws on missing KOSCOM result envelopes", async () => {
+  it("returns US indices when KOSCOM payload is missing the result envelope", async () => {
     const fetcher = vi
       .fn()
       .mockResolvedValueOnce(jsonResponse({ c: 5325.67, d: 22.34, t: 1778164200 }))
       .mockResolvedValueOnce(jsonResponse({ c: 16800.25, d: -33.7, t: 1778164200 }))
       .mockResolvedValueOnce(jsonResponse({ c: 39100.11, d: 58.4, t: 1778164200 }))
+      .mockResolvedValueOnce(jsonResponse({ rows: [] }))
+      .mockResolvedValueOnce(jsonResponse({ rows: [] }))
       .mockResolvedValueOnce(jsonResponse({ rows: [] }));
     const provider = createMixedIndexProvider({ finnhubApiKey: "finnhub-key-with-length", krxApiKey: "krx-key-with-length", fetcher });
 
-    await expect(provider.fetchIndices({ day: "2026-05-07" })).rejects.toThrow("KOSCOM index response for KOSPI is missing result");
+    // KOSCOM fetch failures are softened to skips so the US indices still
+    // commit while the KOSCOM → KRX index migration in EP-0012 is pending.
+    const rows = await provider.fetchIndices({ day: "2026-05-07" });
+    expect(rows.map((row) => row.code)).toEqual(["SP500", "NASDAQ", "DOW"]);
   });
 });
