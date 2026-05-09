@@ -29,38 +29,39 @@ begin
     raise exception 'p_limit must be a non-negative integer';
   end if;
 
-  insert into public.api_quota as quota (provider, day, used, "limit")
+  insert into public.api_quota (provider, day, used, "limit")
   values (p_provider, p_day, 0, p_limit)
-  on conflict (provider, day) do update
+  on conflict on constraint api_quota_pkey do update
     set "limit" = excluded."limit"
-  returning quota.provider, quota.day, quota.used, quota."limit"
+  returning api_quota.provider, api_quota.day, api_quota.used, api_quota."limit"
   into quota_row;
 
   quota_claimed := quota_row.used + p_amount <= p_limit;
 
   if quota_claimed then
-    update public.api_quota as quota
-    set used = quota.used + p_amount,
+    update public.api_quota
+    set used = api_quota.used + p_amount,
         "limit" = p_limit
-    where quota.provider = p_provider
-      and quota.day = p_day
-    returning quota.provider, quota.day, quota.used, quota."limit"
+    where api_quota.provider = p_provider
+      and api_quota.day = p_day
+    returning api_quota.provider, api_quota.day, api_quota.used, api_quota."limit"
     into quota_row;
   end if;
 
   return query
-  select
+  values (
     quota_row.provider,
     quota_row.day,
     quota_row.used,
     quota_row."limit",
-    greatest(quota_row."limit" - quota_row.used, 0) as remaining,
+    greatest(quota_row."limit" - quota_row.used, 0),
     case
       when quota_row."limit" = 0 or quota_row.used >= quota_row."limit" then 'exhausted'
       when quota_row.used::numeric / quota_row."limit" >= 0.8 then 'warning'
       else 'ok'
-    end as status,
-    quota_claimed as claimed;
+    end,
+    quota_claimed
+  );
 end;
 $$;
 
